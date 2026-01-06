@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import SidebarLayout from './components/layout/SidebarLayout/SidebarLayout.jsx';
+import SidebarLayout from './components/layout/SidebarLayout/SidebarLayout';
 import HomePage from './pages/HomePage/HomePage.jsx';
 import SignInPage from './pages/SignInPage/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage/SignUpPage.jsx';

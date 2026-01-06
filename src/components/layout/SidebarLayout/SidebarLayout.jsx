@@ -21,9 +21,9 @@ function SidebarLayout({ children }) {
           </li>
         </ul>
       </nav>
-      <div className="content">
+      <main className="content">
         {children}
-      </div>
+      </main>
     </div>
   );
 }
