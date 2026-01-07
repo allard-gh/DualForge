@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useForm } from "react-hook-form";
+import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
 import "./SignInPage.css";
 
 function SignInPage() {
   const [successMessage, setSuccessMessage] = useState("");
+  const { signIn } = useContext(AuthenticationContext);
   const {
     register,
     handleSubmit,
@@ -11,6 +13,7 @@ function SignInPage() {
   } = useForm();
 
   const onSubmit = (data) => {
+    signIn();
     setSuccessMessage("Sign in successful.");
   };
 

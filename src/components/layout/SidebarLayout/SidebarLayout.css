@@ -8,6 +8,9 @@
   background-color: #f4f4f4;
   padding: 20px;
   border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .sidebar ul {
@@ -26,6 +29,21 @@
 
 .sidebar a.active {
   font-weight: bold;
+  color: #007bff;
+}
+
+.sign-out-button {
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  padding: 0;
+  font-size: inherit;
+  font-family: inherit;
+  text-decoration: none;
+}
+
+.sign-out-button:hover {
   color: #007bff;
 }
 
