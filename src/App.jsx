@@ -18,7 +18,7 @@ function App() {
           <PublicLayout
             topRightContent={
               <>
-                <Link to={ROUTES.SIGN_IN}>Login</Link>
+                <Link to={ROUTES.SIGN_IN}>Sign In</Link>
                 <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
               </>
             }
@@ -41,7 +41,7 @@ function App() {
         path={ROUTES.SIGN_UP}
         element={
           <PublicLayout
-            topRightContent={<Link to={ROUTES.SIGN_IN}>Login</Link>}
+            topRightContent={<Link to={ROUTES.SIGN_IN}>Sign In</Link>}
           >
             <SignUpPage />
           </PublicLayout>
