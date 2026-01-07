@@ -1,5 +1,7 @@
-import { Routes, Route, Link } from 'react-router-dom';
+import { useContext } from 'react';
+import { Routes, Route, Link, Navigate } from 'react-router-dom';
 import { ROUTES } from './constants/routes';
+import { AuthenticationContext } from './context/AuthenticationContext/AuthenticationContext';
 import SidebarLayout from './components/layout/SidebarLayout/SidebarLayout';
 import PublicLayout from './components/layout/PublicLayout/PublicLayout';
 import HomePage from './pages/HomePage/HomePage.jsx';
@@ -10,6 +12,8 @@ import ProjectDetailsPage from './pages/ProjectDetailsPage/ProjectDetailsPage.js
 import BuildsPage from './pages/BuildsPage/BuildsPage.jsx';
 
 function App() {
+  const { isUserAuthenticated } = useContext(AuthenticationContext);
+
   return (
     <Routes>
       <Route
@@ -50,25 +54,37 @@ function App() {
       <Route
         path={ROUTES.DASHBOARD}
         element={
-          <SidebarLayout>
-            <DashboardPage />
-          </SidebarLayout>
+          isUserAuthenticated ? (
+            <SidebarLayout>
+              <DashboardPage />
+            </SidebarLayout>
+          ) : (
+            <Navigate to={ROUTES.SIGN_IN} replace />
+          )
         }
       />
       <Route
         path={ROUTES.PROJECT_DETAILS}
         element={
-          <SidebarLayout>
-            <ProjectDetailsPage />
-          </SidebarLayout>
+          isUserAuthenticated ? (
+            <SidebarLayout>
+              <ProjectDetailsPage />
+            </SidebarLayout>
+          ) : (
+            <Navigate to={ROUTES.SIGN_IN} replace />
+          )
         }
       />
       <Route
         path={ROUTES.PROJECT_BUILDS}
         element={
-          <SidebarLayout>
-            <BuildsPage />
-          </SidebarLayout>
+          isUserAuthenticated ? (
+            <SidebarLayout>
+              <BuildsPage />
+            </SidebarLayout>
+          ) : (
+            <Navigate to={ROUTES.SIGN_IN} replace />
+          )
         }
       />
     </Routes>

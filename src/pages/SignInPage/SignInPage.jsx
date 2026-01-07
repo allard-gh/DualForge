@@ -1,11 +1,13 @@
-import { useState, useContext } from "react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
+import { ROUTES } from "../../constants/routes";
 import "./SignInPage.css";
 
 function SignInPage() {
-  const [successMessage, setSuccessMessage] = useState("");
   const { signIn } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -14,7 +16,7 @@ function SignInPage() {
 
   const onSubmit = (data) => {
     signIn();
-    setSuccessMessage("Sign in successful.");
+    navigate(ROUTES.DASHBOARD);
   };
 
   return (
@@ -45,8 +47,6 @@ function SignInPage() {
 
         <button type="submit">Sign In</button>
       </form>
-
-      {successMessage && <p>{successMessage}</p>}
     </main>
   );
 }
