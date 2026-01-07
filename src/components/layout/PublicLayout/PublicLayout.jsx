@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { ROUTES } from '../../../constants/routes';
 import './PublicLayout.css';
 
 function PublicLayout({ children, topRightContent }) {
@@ -7,7 +8,7 @@ function PublicLayout({ children, topRightContent }) {
     <div className="public-layout">
       <header className="public-header">
         <div className="header-left">
-          <Link to="/" className="brand">DualForge</Link>
+          <Link to={ROUTES.HOME} className="brand">DualForge</Link>
         </div>
         <div className="header-right">
           {topRightContent}

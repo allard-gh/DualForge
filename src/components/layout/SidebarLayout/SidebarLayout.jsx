@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import { ROUTES } from '../../../constants/routes';
 import './SidebarLayout.css';
 
 function SidebarLayout({ children }) {
@@ -8,16 +9,13 @@ function SidebarLayout({ children }) {
       <nav className="sidebar">
         <ul>
           <li>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to={ROUTES.DASHBOARD}>Dashboard</NavLink>
           </li>
           <li>
-            <NavLink to="/dashboard">Dashboard</NavLink>
+            <NavLink to={ROUTES.SIGN_IN}>Sign In</NavLink>
           </li>
           <li>
-            <NavLink to="/sign-in">Sign In</NavLink>
-          </li>
-          <li>
-            <NavLink to="/sign-up">Sign Up</NavLink>
+            <NavLink to={ROUTES.SIGN_UP}>Sign Up</NavLink>
           </li>
         </ul>
       </nav>
