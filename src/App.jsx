@@ -1,4 +1,5 @@
 import { Routes, Route, Link } from 'react-router-dom';
+import { ROUTES } from './constants/routes';
 import SidebarLayout from './components/layout/SidebarLayout/SidebarLayout';
 import PublicLayout from './components/layout/PublicLayout/PublicLayout';
 import HomePage from './pages/HomePage/HomePage.jsx';
@@ -12,13 +13,13 @@ function App() {
   return (
     <Routes>
       <Route
-        path="/"
+        path={ROUTES.HOME}
         element={
           <PublicLayout
             topRightContent={
               <>
-                <Link to="/sign-in">Login</Link>
-                <Link to="/sign-up">Sign Up</Link>
+                <Link to={ROUTES.SIGN_IN}>Login</Link>
+                <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
               </>
             }
           >
@@ -27,27 +28,27 @@ function App() {
         }
       />
       <Route
-        path="/sign-in"
+        path={ROUTES.SIGN_IN}
         element={
           <PublicLayout
-            topRightContent={<Link to="/sign-up">Sign Up</Link>}
+            topRightContent={<Link to={ROUTES.SIGN_UP}>Sign Up</Link>}
           >
             <SignInPage />
           </PublicLayout>
         }
       />
       <Route
-        path="/sign-up"
+        path={ROUTES.SIGN_UP}
         element={
           <PublicLayout
-            topRightContent={<Link to="/sign-in">Login</Link>}
+            topRightContent={<Link to={ROUTES.SIGN_IN}>Login</Link>}
           >
             <SignUpPage />
           </PublicLayout>
         }
       />
       <Route
-        path="/dashboard"
+        path={ROUTES.DASHBOARD}
         element={
           <SidebarLayout>
             <DashboardPage />
@@ -55,7 +56,7 @@ function App() {
         }
       />
       <Route
-        path="/projects/:projectId"
+        path={ROUTES.PROJECT_DETAILS}
         element={
           <SidebarLayout>
             <ProjectDetailsPage />
@@ -63,7 +64,7 @@ function App() {
         }
       />
       <Route
-        path="/projects/:projectId/builds"
+        path={ROUTES.PROJECT_BUILDS}
         element={
           <SidebarLayout>
             <BuildsPage />
