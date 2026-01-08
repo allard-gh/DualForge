@@ -8,11 +8,12 @@ import HomePage from './pages/HomePage/HomePage.jsx';
 import SignInPage from './pages/SignInPage/SignInPage.jsx';
 import SignUpPage from './pages/SignUpPage/SignUpPage.jsx';
 import DashboardPage from './pages/DashboardPage/DashboardPage.jsx';
+import UsersPage from './pages/UsersPage/UsersPage.jsx';
 import ProjectDetailsPage from './pages/ProjectDetailsPage/ProjectDetailsPage.jsx';
 import BuildsPage from './pages/BuildsPage/BuildsPage.jsx';
 
 function App() {
-  const { isUserAuthenticated } = useContext(AuthenticationContext);
+  const { isUserAuthenticated, role } = useContext(AuthenticationContext);
 
   return (
     <Routes>
@@ -84,6 +85,18 @@ function App() {
             </SidebarLayout>
           ) : (
             <Navigate to={ROUTES.SIGN_IN} replace />
+          )
+        }
+      />
+      <Route
+        path={ROUTES.USERS}
+        element={
+          isUserAuthenticated && role === 'admin' ? (
+            <SidebarLayout>
+              <UsersPage />
+            </SidebarLayout>
+          ) : (
+            <Navigate to={ROUTES.DASHBOARD} replace />
           )
         }
       />

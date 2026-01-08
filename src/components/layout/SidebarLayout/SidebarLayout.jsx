@@ -5,7 +5,7 @@ import { AuthenticationContext } from '../../../context/AuthenticationContext/Au
 import './SidebarLayout.css';
 
 function SidebarLayout({ children }) {
-  const { isUserAuthenticated, signOut } = useContext(AuthenticationContext);
+  const { isUserAuthenticated, role, signOut } = useContext(AuthenticationContext);
   const navigate = useNavigate();
 
   const handleSignOut = () => {
@@ -20,6 +20,11 @@ function SidebarLayout({ children }) {
           <li>
             <NavLink to={ROUTES.DASHBOARD}>Dashboard</NavLink>
           </li>
+          {role === 'admin' && (
+            <li>
+              <NavLink to={ROUTES.USERS}>Users</NavLink>
+            </li>
+          )}
         </ul>
         {isUserAuthenticated && (
           <div className="sidebar-footer">

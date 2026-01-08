@@ -5,4 +5,5 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   PROJECT_DETAILS: '/projects/:projectId',
   PROJECT_BUILDS: '/projects/:projectId/builds',
+  USERS: '/users',
 };
