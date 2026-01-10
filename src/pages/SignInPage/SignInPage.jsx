@@ -6,7 +6,7 @@ import { ROUTES } from "../../constants/routes";
 import "./SignInPage.css";
 
 function SignInPage() {
-  const { signIn } = useContext(AuthenticationContext);
+  const { signIn, status } = useContext(AuthenticationContext);
   const navigate = useNavigate();
   const {
     register,
@@ -14,9 +14,11 @@ function SignInPage() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    signIn();
-    navigate(ROUTES.DASHBOARD);
+  const onSubmit = async (data) => {
+    await signIn(data);
+    if (localStorage.getItem("dualforgeToken")) {
+      navigate(ROUTES.DASHBOARD);
+    }
   };
 
   return (
@@ -45,6 +47,7 @@ function SignInPage() {
           {errors.password && <span>{errors.password.message}</span>}
         </div>
 
+        {status === "error" && <p className="error-message">Login failed. Check your credentials and try again</p>}
         <button type="submit">Sign In</button>
       </form>
     </main>
