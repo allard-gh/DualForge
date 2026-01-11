@@ -6,42 +6,49 @@ import "./DashboardPage.css";
 function DashboardPage() {
   const {token} = useContext(AuthenticationContext);
   const [projects, setProjects] = useState([]);
+  const [projectPartners, setProjectPartners] = useState([]);
+  const [companies, setCompanies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
     if (!token) return;
 
-    async function fetchProjects() {
+    async function fetchData() {
       setIsLoading(true);
       setHasError(false);
 
-      try {
-        const response = await fetch("https://novi-backend-api-wgsgz.ondigitalocean.app/api/projects", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "novi-education-project-id": "c8c123e6-beb1-4124-9d9f-b3c03ec31a1a",
-            "Authorization": `Bearer ${token}`
-          }
-        });
+      const headers = {
+        "Content-Type": "application/json",
+        "novi-education-project-id": "c8c123e6-beb1-4124-9d9f-b3c03ec31a1a",
+        "Authorization": `Bearer ${token}`
+      };
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch projects");
+      try {
+        const projectsResult = await fetch("https://novi-backend-api-wgsgz.ondigitalocean.app/api/projects", {headers});
+        const projectPartnersResult = await fetch("https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectPartners", {headers});
+        const companiesResult = await fetch("https://novi-backend-api-wgsgz.ondigitalocean.app/api/companies", {headers});
+
+        if (!projectsResult.ok || !projectPartnersResult.ok || !companiesResult.ok) {
+          throw new Error("Failed to fetch dashboard data");
         }
 
-        const data = await response.json();
-        console.log("Projects response data:", data);
-        setProjects(data);
+        const projectsData = await projectsResult.json();
+        const partnersData = await projectPartnersResult.json();
+        const companiesData = await companiesResult.json();
+
+        setProjects(projectsData);
+        setProjectPartners(partnersData);
+        setCompanies(companiesData);
       } catch (error) {
-        console.error("Could not fetch projects:", error);
+        console.error("Could not fetch dashboard data:", error);
         setHasError(true);
       } finally {
         setIsLoading(false);
       }
     }
 
-    fetchProjects();
+    fetchData();
   }, [token]);
 
   return (
@@ -58,16 +65,27 @@ function DashboardPage() {
             <p>No projects found.</p>
           ) : (
             <div className="dashboard-page__grid">
-              {projects.map((project) => (
-                <ProjectCard
-                  key={project.id}
-                  title={project.title}
-                  client={project.clientCompanyId}
-                  deadline={project.deadline || ""}
-                  status={project.status || ""}
-                  coverImage={project.coverImage}
-                />
-              ))}
+              {projects.map((project) => {
+                const partnerNames = projectPartners
+                  .filter((pp) => pp.projectId === project.id && pp.role !== "client")
+                  .map((pp) => {
+                    const company = companies.find((c) => c.id === pp.companyId);
+                    return company ? company.name : null;
+                  })
+                  .filter((name) => name !== null);
+
+                return (
+                  <ProjectCard
+                    key={project.id}
+                    title={project.title}
+                    client={project.clientCompanyId}
+                    partners={partnerNames}
+                    deadline={project.deadline || ""}
+                    status={project.status || ""}
+                    coverImage={project.coverImage}
+                  />
+                );
+              })}
             </div>
           )}
         </section>
