@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
+import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import "./DashboardPage.css";
 
 function DashboardPage() {
@@ -33,6 +34,7 @@ function DashboardPage() {
         console.log("Projects response data:", data);
         setProjects(data);
       } catch (error) {
+        console.error("Could not fetch projects:", error);
         setHasError(true);
       } finally {
         setIsLoading(false);
@@ -49,6 +51,27 @@ function DashboardPage() {
 
       {isLoading && <p>Loading projects...</p>}
       {hasError && <p>Could not load projects. Please try again.</p>}
+
+      {!isLoading && !hasError && (
+        <section className="dashboard-page__projects">
+          {projects.length === 0 ? (
+            <p>No projects found.</p>
+          ) : (
+            <div className="dashboard-page__grid">
+              {projects.map((project) => (
+                <ProjectCard
+                  key={project.id}
+                  title={project.title}
+                  client={project.clientCompanyId}
+                  deadline={project.deadline || ""}
+                  status={project.status || ""}
+                  coverImage={project.coverImage}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      )}
     </main>
   );
 }
