@@ -74,11 +74,15 @@ function DashboardPage() {
                   })
                   .filter((name) => name !== null);
 
+                const clientCompany = companies.find((c) => c.id === project.clientCompanyId);
+                const clientName = clientCompany ? clientCompany.name : "Unknown client";
+
                 return (
                   <ProjectCard
                     key={project.id}
+                    projectId={project.id}
                     title={project.title}
-                    client={project.clientCompanyId}
+                    client={clientName}
                     partners={partnerNames}
                     deadline={project.deadline || ""}
                     status={project.status || ""}
