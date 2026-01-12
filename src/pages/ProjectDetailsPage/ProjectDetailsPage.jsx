@@ -1,12 +1,142 @@
+import { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
+import FallbackImage from "../../assets/images/fallback.svg?react";
 import "./ProjectDetailsPage.css";
 
 function ProjectDetailsPage() {
+  const { projectId } = useParams();
+  const { token } = useContext(AuthenticationContext);
+
+  const [project, setProject] = useState(null);
+  const [companies, setCompanies] = useState([]);
+  const [projectPartners, setProjectPartners] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    if (!token || !projectId) return;
+
+    async function fetchData() {
+      setIsLoading(true);
+      setHasError(false);
+
+      const headers = {
+        "Content-Type": "application/json",
+        "novi-education-project-id": "c8c123e6-beb1-4124-9d9f-b3c03ec31a1a",
+        "Authorization": `Bearer ${token}`,
+      };
+
+      try {
+        const projectResult = await fetch(
+          `https://novi-backend-api-wgsgz.ondigitalocean.app/api/projects/${projectId}`,
+          { headers }
+        );
+        const projectPartnersResult = await fetch(
+          "https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectPartners",
+          { headers }
+        );
+        const companiesResult = await fetch(
+          "https://novi-backend-api-wgsgz.ondigitalocean.app/api/companies",
+          { headers }
+        );
+
+        if (!projectResult.ok || !projectPartnersResult.ok || !companiesResult.ok) {
+          throw new Error("Failed to fetch project data");
+        }
+
+        const projectData = await projectResult.json();
+        const projectPartnersData = await projectPartnersResult.json();
+        const companiesData = await companiesResult.json();
+
+        setProject(projectData);
+        setProjectPartners(projectPartnersData);
+        setCompanies(companiesData);
+      } catch (error) {
+        console.error("Could not fetch project data:", error);
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [token, projectId]);
+
+  if (isLoading) {
     return (
-        <main className="project-details-page">
-            <h1>Project Details</h1>
-            <p>View and edit specific details of your project.</p>
-        </main>
+      <main className="project-details-page">
+        <p>Loading project...</p>
+      </main>
     );
+  }
+
+  if (hasError || !project) {
+    return (
+      <main className="project-details-page">
+        <p>Could not load project. Please try again.</p>
+      </main>
+    );
+  }
+
+  const clientCompany = companies.find((c) => c.id === project.clientCompanyId);
+  const clientName = clientCompany ? clientCompany.name : "Unknown client";
+
+  const partnerNames = projectPartners
+    .filter((pp) => pp.projectId === project.id && pp.role !== "client")
+    .map((pp) => {
+      const company = companies.find((c) => c.id === pp.companyId);
+      return company ? company.name : null;
+    })
+    .filter((name) => name !== null);
+
+  return (
+    <main className="project-details-page">
+      <h1>{project.title}</h1>
+
+      <section className="project-details-page__upper">
+        <div className="project-details-page__image-container">
+          {project.coverImage ? (
+            <img src={project.coverImage} alt={project.title} />
+          ) : (
+            <FallbackImage className="project-details-page__fallback-image" />
+          )}
+        </div>
+
+        <div className="project-details-page__info">
+          <p className="project-details-page__description">
+            {project.description || "No description available."}
+          </p>
+          <div className="project-details-page__meta">
+            <p>
+              <strong>Client:</strong> {clientName}
+            </p>
+            {partnerNames.length > 0 && (
+              <p>
+                <strong>Partners:</strong> {partnerNames.join(", ")}
+              </p>
+            )}
+            {project.deadline && (
+              <p>
+                <strong>Deadline:</strong> {project.deadline}
+              </p>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="project-details-page__lower">
+        <div className="project-details-page__placeholder-card">
+          <h2>Approved Builds</h2>
+          <p>No builds available yet.</p>
+        </div>
+        <div className="project-details-page__placeholder-card">
+          <h2>Documents</h2>
+          <p>No documents available yet.</p>
+        </div>
+      </section>
+    </main>
+  );
 }
 
 export default ProjectDetailsPage;

@@ -1,3 +1,48 @@
 .project-details-page {
-    padding: 2rem;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.project-details-page__upper {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.project-details-page__image-container {
+  flex: 1;
+}
+
+.project-details-page__image-container img,
+.project-details-page__fallback-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.project-details-page__info {
+  flex: 1;
+}
+
+.project-details-page__description {
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
+}
+
+.project-details-page__meta p {
+  margin: 0.5rem 0;
+}
+
+.project-details-page__lower {
+  display: flex;
+  gap: 2rem;
+}
+
+.project-details-page__placeholder-card {
+  flex: 1;
+  padding: 1.5rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  background-color: #f9f9f9;
 }
