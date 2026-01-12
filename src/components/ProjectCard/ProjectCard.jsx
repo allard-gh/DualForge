@@ -1,10 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProjectCard.css';
 import FallbackImage from '../../assets/images/fallback.svg?react';
 import { getProjectStatusColor } from '../../helpers/getProjectStatusColor';
 
-const ProjectCard = ({ title, client, partners, deadline, status, coverImage }) => {
+const ProjectCard = ({ title, client, partners, deadline, status, coverImage, projectId }) => {
   const statusColor = getProjectStatusColor(status, deadline);
+  const navigate = useNavigate();
+
+  const handleGoToProject = () => {
+    navigate(`/projects/${projectId}`);
+  };
 
   return (
     <article className="project-card">
@@ -36,7 +42,11 @@ const ProjectCard = ({ title, client, partners, deadline, status, coverImage }) 
         <p className="project-card__deadline">
           <strong>Deadline:</strong> {deadline}
         </p>
-        <button className="project-card__button" type="button">
+        <button 
+          className="project-card__button" 
+          type="button"
+          onClick={handleGoToProject}
+        >
           Go to
         </button>
       </div>
