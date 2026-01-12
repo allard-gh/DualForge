@@ -700,8 +700,8 @@
         "id": 1001,
         "title": "Top2000",
         "clientCompanyId": 16,
-        "description": "Studio build voor uitzending + signage.",
-        "coverImageAlt": "Studio build en signage voor NPO Radio 2 Top2000 uitzending",
+        "description": "Studio build voor uitzending + signing.",
+        "coverImageAlt": "Studio build en signing voor NPO Radio 2 Top2000 uitzending",
         "location": "Hilversum",
         "deadline": "2021-12-20",
         "status": "completed",
@@ -744,8 +744,8 @@
         "id": 1005,
         "title": "World Economic Forum",
         "clientCompanyId": 14,
-        "description": "Corporate lounge build + signage.",
-        "coverImageAlt": "Corporate lounge build en signage voor World Economic Forum",
+        "description": "Corporate lounge build + signing.",
+        "coverImageAlt": "Corporate lounge build en signing voor World Economic Forum",
         "location": "Davos, Switzerland",
         "deadline": "2025-01-10",
         "status": "completed",
@@ -767,7 +767,7 @@
         "title": "Corona Cero Winter Olympics",
         "clientCompanyId": 13,
         "description": "Winter Olympics activatie build.",
-        "coverImageAlt": "Winter Olympics activatie build en signage voor Corona Cero",
+        "coverImageAlt": "Winter Olympics activatie build en signing voor Corona Cero",
         "location": "Italy",
         "approvalDeadline": "2026-01-25",
         "deadline": "2026-03-01",
@@ -956,7 +956,7 @@
       {
         "id": 2009,
         "projectId": 1007,
-        "title": "Winter Olympics signage pack – v1",
+        "title": "Winter Olympics signing pack – v1",
         "approvalDeadline": "2026-01-25",
         "deadline": "2026-02-12"
       }
@@ -1059,8 +1059,8 @@
       {
         "id": 3203,
         "buildId": 2009,
-        "title": "Signage pack – Corona Cero – not approved",
-        "url": "https://example.com/dualforge/coronacero/signage-pack-v1-notapproved.pdf",
+        "title": "signing pack – Corona Cero – not approved",
+        "url": "https://example.com/dualforge/coronacero/signing-pack-v1-notapproved.pdf",
         "fileType": "drawing",
         "isApproved": false
       }
