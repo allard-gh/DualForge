@@ -1,10 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthenticationContext } from './AuthenticationContext';
 
 function AuthenticationContextProvider({ children }) {
-  const [token, setToken] = useState(localStorage.getItem('dualforgeToken') || null);
-  const [role, setRole] = useState(localStorage.getItem('dualforgeRole') || null);
+  const [token, setToken] = useState(() => {
+    const savedToken = localStorage.getItem('dualforgeToken');
+    const savedCreatedAt = localStorage.getItem('dualforgeTokenCreatedAt');
+
+    if (savedToken && !savedCreatedAt) {
+      localStorage.removeItem('dualforgeToken');
+      localStorage.removeItem('dualforgeRole');
+      localStorage.removeItem('dualforgeTokenCreatedAt');
+      return null;
+    }
+
+    if (savedToken && savedCreatedAt) {
+      const expired = Date.now() - Number(savedCreatedAt) > 3 * 60 * 60 * 1000;
+      if (expired) {
+        localStorage.removeItem('dualforgeToken');
+        localStorage.removeItem('dualforgeRole');
+        localStorage.removeItem('dualforgeTokenCreatedAt');
+        return null;
+      }
+    }
+
+    return savedToken || null;
+  });
+
+  const [role, setRole] = useState(() => {
+    const savedToken = localStorage.getItem('dualforgeToken');
+    if (!savedToken) return null;
+    return localStorage.getItem('dualforgeRole') || null;
+  });
+
   const [status, setStatus] = useState('done');
+
+  useEffect(() => {
+    if (!token) return;
+
+    const savedCreatedAt = localStorage.getItem('dualforgeTokenCreatedAt');
+    if (!savedCreatedAt) return;
+
+    const remainingTime = 3 * 60 * 60 * 1000 - (Date.now() - Number(savedCreatedAt));
+
+    const timeoutId = setTimeout(() => {
+      signOut();
+    }, Math.max(0, remainingTime));
+
+    return () => clearTimeout(timeoutId);
+  }, [token]);
 
   const isUserAuthenticated = Boolean(token);
 
@@ -34,6 +77,7 @@ function AuthenticationContextProvider({ children }) {
         setRole(null);
         localStorage.removeItem('dualforgeToken');
         localStorage.removeItem('dualforgeRole');
+        localStorage.removeItem('dualforgeTokenCreatedAt');
         setStatus('error');
         return;
       }
@@ -48,6 +92,7 @@ function AuthenticationContextProvider({ children }) {
         setRole(null);
         localStorage.removeItem('dualforgeToken');
         localStorage.removeItem('dualforgeRole');
+        localStorage.removeItem('dualforgeTokenCreatedAt');
         setStatus('error');
         return;
       }
@@ -57,6 +102,7 @@ function AuthenticationContextProvider({ children }) {
       setStatus('done');
 
       localStorage.setItem('dualforgeToken', newToken);
+      localStorage.setItem('dualforgeTokenCreatedAt', String(Date.now()));
       if (newRole) {
         localStorage.setItem('dualforgeRole', newRole);
       } else {
@@ -67,6 +113,7 @@ function AuthenticationContextProvider({ children }) {
       setRole(null);
       localStorage.removeItem('dualforgeToken');
       localStorage.removeItem('dualforgeRole');
+      localStorage.removeItem('dualforgeTokenCreatedAt');
       setStatus('error');
     }
   };
@@ -76,6 +123,7 @@ function AuthenticationContextProvider({ children }) {
     setRole(null);
     localStorage.removeItem('dualforgeToken');
     localStorage.removeItem('dualforgeRole');
+    localStorage.removeItem('dualforgeTokenCreatedAt');
     setStatus('done');
   };
 
