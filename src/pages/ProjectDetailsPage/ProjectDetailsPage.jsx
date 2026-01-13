@@ -4,6 +4,14 @@ import { AuthenticationContext } from "../../context/AuthenticationContext/Authe
 import FallbackImage from "../../assets/images/fallback.svg?react";
 import "./ProjectDetailsPage.css";
 
+import top2000Img from "../../assets/images/Top-2000-cafe.jpg";
+import mysterylandImg from "../../assets/images/mysteryland-haarlemmermeer.jpg";
+import quicksliceImg from "../../assets/images/dr-oetker-suprema.jpg";
+import cokeParisImg from "../../assets/images/coke-paris-2024.avif";
+import wefImg from "../../assets/images/WEF-Davos-2026.png";
+import moetImg from "../../assets/images/moet_red_limited_edition.jpg";
+import coronaImg from "../../assets/images/Corona-Cero-Winter-Olympics.jpg";
+
 function ProjectDetailsPage() {
   const { projectId } = useParams();
   const { token } = useContext(AuthenticationContext);
@@ -90,6 +98,18 @@ function ProjectDetailsPage() {
     })
     .filter((name) => name !== null);
 
+  const localImages = {
+    1001: top2000Img,
+    1002: mysterylandImg,
+    1003: quicksliceImg,
+    1004: cokeParisImg,
+    1005: wefImg,
+    1006: moetImg,
+    1007: coronaImg,
+  };
+
+  const localCoverImage = localImages[projectId] || null;
+
   return (
     <main className="project-details-page">
       <h1>{project.title}</h1>
@@ -97,7 +117,9 @@ function ProjectDetailsPage() {
       <section className="project-details-page__upper">
         <div className="project-details-page__image-container">
           {project.coverImage ? (
-            <img src={project.coverImage} alt={project.title} />
+            <img src={project.coverImage} alt={project.coverImageAlt || project.title} />
+          ) : localCoverImage ? (
+            <img src={localCoverImage} alt={project.coverImageAlt || project.title} />
           ) : (
             <FallbackImage className="project-details-page__fallback-image" />
           )}
