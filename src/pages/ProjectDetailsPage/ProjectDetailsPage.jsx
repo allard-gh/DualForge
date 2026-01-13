@@ -130,6 +130,9 @@ function ProjectDetailsPage() {
 
   const localCoverImage = localImages[projectId] || null;
 
+  const projectDocumentsForThisProject =
+    projectDocuments.filter((doc) => doc.projectId === project.id);
+
   return (
     <main className="project-details-page">
       <h1>{project.title}</h1>
@@ -174,7 +177,20 @@ function ProjectDetailsPage() {
         </div>
         <div className="project-details-page__placeholder-card">
           <h2>Documents</h2>
-          <p>No documents available yet.</p>
+          {projectDocumentsForThisProject.length === 0 ? (
+            <p>No documents available yet.</p>
+          ) : (
+            <ul>
+              {projectDocumentsForThisProject.map((doc) => (
+                <li key={doc.id}>
+                  <a href={doc.url}>{doc.title}</a>
+                  <p className="project-details-page__meta-line">
+                    {doc.fileType} - {doc.isApproved ? "Approved" : "Not approved"}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
     </main>
