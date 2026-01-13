@@ -34,6 +34,12 @@
           "default": "document"
         },
         {
+          "name": "isApproved",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
           "name": "createdAt",
           "type": "date",
           "required": false,
@@ -398,6 +404,43 @@
           "name": "approvedAt",
           "type": "date",
           "required": false
+        },
+        {
+          "name": "projectId",
+          "type": "reference:projects",
+          "required": true
+        },
+        {
+          "name": "internalApproval",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "internalApprovedByEmail",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "internalApprovedAt",
+          "type": "date",
+          "required": false
+        },
+        {
+          "name": "partnerApproval",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        },
+        {
+          "name": "partnerApprovedByEmail",
+          "type": "string",
+          "required": false
+        },
+        {
+          "name": "partnerApprovedAt",
+          "type": "date",
+          "required": false
         }
       ],
       "permissions": {
@@ -605,60 +648,130 @@
   "data": {
     "projectDocuments": [
       {
-        "id": 1,
+        "id": 101,
         "projectId": 1001,
-        "title": "Document placeholder 1",
-        "url": "https://example.com/dualforge/projects/1001/document-placeholder-1.pdf",
+        "title": "Safety plan - Top2000",
+        "url": "https://example.com/dualforge/projects/1001/safety-plan.pdf",
         "fileType": "document",
-        "createdAt": "2026-01-13"
+        "isApproved": true,
+        "createdAt": "2021-12-01"
       },
       {
-        "id": 2,
+        "id": 102,
+        "projectId": 1001,
+        "title": "Site access rules",
+        "url": "https://example.com/dualforge/projects/1001/site-access.pdf",
+        "fileType": "document",
+        "isApproved": true,
+        "createdAt": "2021-12-01"
+      },
+      {
+        "id": 103,
         "projectId": 1002,
-        "title": "Document placeholder 1",
-        "url": "https://example.com/dualforge/projects/1002/document-placeholder-1.pdf",
+        "title": "Mysteryland technical specs",
+        "url": "https://example.com/dualforge/projects/1002/tech-specs.pdf",
         "fileType": "document",
-        "createdAt": "2026-01-13"
+        "isApproved": true,
+        "createdAt": "2022-07-01"
       },
       {
-        "id": 3,
+        "id": 104,
+        "projectId": 1002,
+        "title": "Fire safety certificate",
+        "url": "https://example.com/dualforge/projects/1002/fire-safety.pdf",
+        "fileType": "document",
+        "isApproved": true,
+        "createdAt": "2022-07-05"
+      },
+      {
+        "id": 105,
         "projectId": 1003,
-        "title": "Document placeholder 1",
-        "url": "https://example.com/dualforge/projects/1003/document-placeholder-1.pdf",
+        "title": "Quick Slice brand guidelines",
+        "url": "https://example.com/dualforge/projects/1003/brand-guidelines.pdf",
         "fileType": "document",
-        "createdAt": "2026-01-13"
+        "isApproved": true,
+        "createdAt": "2023-05-01"
       },
       {
-        "id": 4,
+        "id": 106,
+        "projectId": 1003,
+        "title": "Retail installation manual",
+        "url": "https://example.com/dualforge/projects/1003/install-manual.pdf",
+        "fileType": "document",
+        "isApproved": true,
+        "createdAt": "2023-05-05"
+      },
+      {
+        "id": 107,
         "projectId": 1004,
-        "title": "Document placeholder 1",
-        "url": "https://example.com/dualforge/projects/1004/document-placeholder-1.pdf",
+        "title": "Paris 2024 venue rules",
+        "url": "https://example.com/dualforge/projects/1004/venue-rules.pdf",
         "fileType": "document",
-        "createdAt": "2026-01-13"
+        "isApproved": true,
+        "createdAt": "2024-06-01"
       },
       {
-        "id": 5,
+        "id": 108,
+        "projectId": 1004,
+        "title": "Sustainability report",
+        "url": "https://example.com/dualforge/projects/1004/sustainability.pdf",
+        "fileType": "document",
+        "isApproved": true,
+        "createdAt": "2024-06-05"
+      },
+      {
+        "id": 109,
         "projectId": 1005,
-        "title": "Document placeholder 1",
-        "url": "https://example.com/dualforge/projects/1005/document-placeholder-1.pdf",
+        "title": "WEF Davos logistics",
+        "url": "https://example.com/dualforge/projects/1005/logistics.pdf",
         "fileType": "document",
-        "createdAt": "2026-01-13"
+        "isApproved": true,
+        "createdAt": "2024-12-01"
       },
       {
-        "id": 6,
+        "id": 110,
+        "projectId": 1005,
+        "title": "Security clearance protocol",
+        "url": "https://example.com/dualforge/projects/1005/security.pdf",
+        "fileType": "document",
+        "isApproved": true,
+        "createdAt": "2024-12-05"
+      },
+      {
+        "id": 111,
         "projectId": 1006,
-        "title": "Document placeholder 1",
-        "url": "https://example.com/dualforge/projects/1006/document-placeholder-1.pdf",
+        "title": "Moet 2025 Campaign Brief",
+        "url": "https://example.com/dualforge/projects/1006/campaign-brief.pdf",
         "fileType": "document",
-        "createdAt": "2026-01-13"
+        "isApproved": true,
+        "createdAt": "2026-01-05"
       },
       {
-        "id": 7,
-        "projectId": 1007,
-        "title": "Document placeholder 1",
-        "url": "https://example.com/dualforge/projects/1007/document-placeholder-1.pdf",
+        "id": 112,
+        "projectId": 1006,
+        "title": "Multi-site rollout plan",
+        "url": "https://example.com/dualforge/projects/1006/rollout-plan.pdf",
         "fileType": "document",
-        "createdAt": "2026-01-13"
+        "isApproved": false,
+        "createdAt": "2026-01-08"
+      },
+      {
+        "id": 113,
+        "projectId": 1007,
+        "title": "Corona Cero Event Permit",
+        "url": "https://example.com/dualforge/projects/1007/event-permit.pdf",
+        "fileType": "document",
+        "isApproved": true,
+        "createdAt": "2026-01-02"
+      },
+      {
+        "id": 114,
+        "projectId": 1007,
+        "title": "Winter Olympics Health & Safety",
+        "url": "https://example.com/dualforge/projects/1007/safety.pdf",
+        "fileType": "document",
+        "isApproved": false,
+        "createdAt": "2026-01-10"
       }
     ],
     "companies": [
@@ -1087,105 +1200,182 @@
     "buildFiles": [
       {
         "id": 3001,
+        "projectId": 1001,
         "buildId": 2001,
         "title": "Drawing – Top2000 studio layout",
         "url": "https://example.com/dualforge/top2000/studio-layout.pdf",
         "fileType": "drawing",
         "isApproved": true,
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
-        "approvedAt": "2021-12-06"
+        "approvedAt": "2021-12-06",
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2021-12-05",
+        "partnerApproval": true,
+        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedAt": "2021-12-06"
       },
       {
         "id": 3002,
+        "projectId": 1002,
         "buildId": 2002,
         "title": "Drawing – Mysteryland booth",
         "url": "https://example.com/dualforge/mysteryland/booth-v2.pdf",
         "fileType": "drawing",
         "isApproved": true,
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
-        "approvedAt": "2022-07-21"
+        "approvedAt": "2022-07-21",
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2022-07-20",
+        "partnerApproval": true,
+        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedAt": "2022-07-21"
       },
       {
         "id": 3003,
+        "projectId": 1003,
         "buildId": 2003,
         "title": "Drawing – Quick Slice retail display",
         "url": "https://example.com/dualforge/quickslice/retail-display-v1.pdf",
         "fileType": "drawing",
         "isApproved": true,
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
-        "approvedAt": "2023-05-11"
+        "approvedAt": "2023-05-11",
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2023-05-10",
+        "partnerApproval": true,
+        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedAt": "2023-05-11"
       },
       {
         "id": 3004,
+        "projectId": 1004,
         "buildId": 2004,
         "title": "Drawing – Olympics Paris activation",
         "url": "https://example.com/dualforge/olympicsparis/activation-v3.pdf",
         "fileType": "drawing",
         "isApproved": true,
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
-        "approvedAt": "2024-06-12"
+        "approvedAt": "2024-06-12",
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2024-06-11",
+        "partnerApproval": true,
+        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedAt": "2024-06-12"
       },
       {
         "id": 3005,
+        "projectId": 1005,
         "buildId": 2005,
         "title": "Drawing – WEF lounge layout",
         "url": "https://example.com/dualforge/wef/lounge-v1.pdf",
         "fileType": "drawing",
         "isApproved": true,
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
-        "approvedAt": "2024-12-12"
+        "approvedAt": "2024-12-12",
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2024-12-11",
+        "partnerApproval": true,
+        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedAt": "2024-12-12"
       },
       {
         "id": 3101,
+        "projectId": 1006,
         "buildId": 2006,
         "title": "Drawing – Moët Utrecht structure",
         "url": "https://example.com/dualforge/moet/utrecht-structure.pdf",
         "fileType": "drawing",
         "isApproved": true,
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
-        "approvedAt": "2026-01-10"
+        "approvedAt": "2026-01-10",
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2026-01-08",
+        "partnerApproval": true,
+        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedAt": "2026-01-10"
       },
       {
         "id": 3102,
+        "projectId": 1006,
         "buildId": 2006,
         "title": "Drawing – Moët Utrecht branding – pending",
         "url": "https://example.com/dualforge/moet/utrecht-branding-pending.pdf",
         "fileType": "drawing",
-        "isApproved": false
+        "isApproved": false,
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2026-01-09",
+        "partnerApproval": false,
+        "partnerApprovedByEmail": null,
+        "partnerApprovedAt": null
       },
       {
         "id": 3103,
+        "projectId": 1006,
         "buildId": 2007,
         "title": "Drawing – Moët Amsterdam initial",
         "url": "https://example.com/dualforge/moet/amsterdam-initial.pdf",
         "fileType": "drawing",
-        "isApproved": false
+        "isApproved": false,
+        "internalApproval": false,
+        "internalApprovedByEmail": null,
+        "internalApprovedAt": null,
+        "partnerApproval": false,
+        "partnerApprovedByEmail": null,
+        "partnerApprovedAt": null
       },
       {
         "id": 3201,
+        "projectId": 1007,
         "buildId": 2008,
         "title": "Drawing – Corona Cero booth footprint",
         "url": "https://example.com/dualforge/coronacero/booth-footprint.pdf",
         "fileType": "drawing",
         "isApproved": true,
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
-        "approvedAt": "2026-01-09"
+        "approvedAt": "2026-01-09",
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2026-01-08",
+        "partnerApproval": true,
+        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedAt": "2026-01-09"
       },
       {
         "id": 3202,
+        "projectId": 1007,
         "buildId": 2008,
         "title": "Drawing – Corona Cero booth elevations – pending",
         "url": "https://example.com/dualforge/coronacero/booth-elevations-pending.pdf",
         "fileType": "drawing",
-        "isApproved": false
+        "isApproved": false,
+        "internalApproval": true,
+        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedAt": "2026-01-11",
+        "partnerApproval": false,
+        "partnerApprovedByEmail": null,
+        "partnerApprovedAt": null
       },
       {
         "id": 3203,
+        "projectId": 1007,
         "buildId": 2009,
         "title": "Signage pack – Corona Cero",
         "url": "https://example.com/dualforge/coronacero/signage-pack-v1.pdf",
         "fileType": "drawing",
-        "isApproved": false
+        "isApproved": false,
+        "internalApproval": false,
+        "internalApprovedByEmail": null,
+        "internalApprovedAt": null,
+        "partnerApproval": false,
+        "partnerApprovedByEmail": null,
+        "partnerApprovedAt": null
       }
     ],
     "accessRequests": [
