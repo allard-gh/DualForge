@@ -1,6 +1,70 @@
 {
   "collections": [
     {
+      "name": "projectDocuments",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "projectId",
+          "type": "reference:projects",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "min": 2,
+          "max": 140
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "required": true,
+          "min": 10,
+          "max": 255
+        },
+        {
+          "name": "fileType",
+          "type": "string",
+          "required": false,
+          "default": "document"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "required": false,
+          "default": "CurrentDate"
+        }
+      ],
+      "permissions": {
+        "GET": [
+          "builder",
+          "regular_user",
+          "pm_internal",
+          "pm_external",
+          "admin"
+        ],
+        "POST": [
+          "pm_internal",
+          "pm_external",
+          "admin"
+        ],
+        "PUT": [
+          "pm_internal",
+          "pm_external",
+          "admin"
+        ],
+        "DELETE": [
+          "pm_internal",
+          "admin"
+        ]
+      }
+    },
+    {
       "name": "companies",
       "fields": [
         {
@@ -350,6 +414,7 @@
           "admin"
         ],
         "PUT": [
+          "pm_external",
           "pm_internal",
           "admin"
         ],
@@ -538,6 +603,64 @@
     }
   ],
   "data": {
+    "projectDocuments": [
+      {
+        "id": 1,
+        "projectId": 1001,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1001/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 2,
+        "projectId": 1002,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1002/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 3,
+        "projectId": 1003,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1003/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 4,
+        "projectId": 1004,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1004/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 5,
+        "projectId": 1005,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1005/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 6,
+        "projectId": 1006,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1006/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 7,
+        "projectId": 1007,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1007/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      }
+    ],
     "companies": [
       {
         "id": 1,
@@ -700,8 +823,8 @@
         "id": 1001,
         "title": "Top2000",
         "clientCompanyId": 16,
-        "description": "Studio build voor uitzending + signage.",
-        "coverImageAlt": "Studio build en signage voor NPO Radio 2 Top2000 uitzending",
+        "description": "Studio build voor uitzending + signing.",
+        "coverImageAlt": "Studio build en signing voor NPO Radio 2 Top2000 uitzending",
         "location": "Hilversum",
         "deadline": "2021-12-20",
         "status": "completed",
@@ -744,8 +867,8 @@
         "id": 1005,
         "title": "World Economic Forum",
         "clientCompanyId": 14,
-        "description": "Corporate lounge build + signage.",
-        "coverImageAlt": "Corporate lounge build en signage voor World Economic Forum",
+        "description": "Corporate lounge build + signing.",
+        "coverImageAlt": "Corporate lounge build en signing voor World Economic Forum",
         "location": "Davos, Switzerland",
         "deadline": "2025-01-10",
         "status": "completed",
@@ -767,7 +890,7 @@
         "title": "Corona Cero Winter Olympics",
         "clientCompanyId": 13,
         "description": "Winter Olympics activatie build.",
-        "coverImageAlt": "Winter Olympics activatie build en signage voor Corona Cero",
+        "coverImageAlt": "Winter Olympics activatie build en signing voor Corona Cero",
         "location": "Italy",
         "approvalDeadline": "2026-01-25",
         "deadline": "2026-03-01",
