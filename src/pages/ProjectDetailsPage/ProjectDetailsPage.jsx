@@ -19,6 +19,8 @@ function ProjectDetailsPage() {
   const [project, setProject] = useState(null);
   const [companies, setCompanies] = useState([]);
   const [projectPartners, setProjectPartners] = useState([]);
+  const [buildFiles, setBuildFiles] = useState([]);
+  const [projectDocuments, setProjectDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -48,18 +50,36 @@ function ProjectDetailsPage() {
           "https://novi-backend-api-wgsgz.ondigitalocean.app/api/companies",
           { headers }
         );
+        const buildFilesResult = await fetch(
+          "https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles",
+          { headers }
+        );
+        const projectDocumentsResult = await fetch(
+          "https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectDocuments",
+          { headers }
+        );
 
-        if (!projectResult.ok || !projectPartnersResult.ok || !companiesResult.ok) {
+        if (
+          !projectResult.ok ||
+          !projectPartnersResult.ok ||
+          !companiesResult.ok ||
+          !buildFilesResult.ok ||
+          !projectDocumentsResult.ok
+        ) {
           throw new Error("Failed to fetch project data");
         }
 
         const projectData = await projectResult.json();
         const projectPartnersData = await projectPartnersResult.json();
         const companiesData = await companiesResult.json();
+        const buildFilesData = await buildFilesResult.json();
+        const projectDocumentsData = await projectDocumentsResult.json();
 
         setProject(projectData);
         setProjectPartners(projectPartnersData);
         setCompanies(companiesData);
+        setBuildFiles(buildFilesData);
+        setProjectDocuments(projectDocumentsData);
       } catch (error) {
         console.error("Could not fetch project data:", error);
         setHasError(true);
