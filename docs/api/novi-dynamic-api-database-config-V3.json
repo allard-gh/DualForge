@@ -1,6 +1,70 @@
 {
   "collections": [
     {
+      "name": "projectDocuments",
+      "fields": [
+        {
+          "name": "id",
+          "type": "number",
+          "required": true
+        },
+        {
+          "name": "projectId",
+          "type": "reference:projects",
+          "required": true
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "required": true,
+          "min": 2,
+          "max": 140
+        },
+        {
+          "name": "url",
+          "type": "string",
+          "required": true,
+          "min": 10,
+          "max": 255
+        },
+        {
+          "name": "fileType",
+          "type": "string",
+          "required": false,
+          "default": "document"
+        },
+        {
+          "name": "createdAt",
+          "type": "date",
+          "required": false,
+          "default": "CurrentDate"
+        }
+      ],
+      "permissions": {
+        "GET": [
+          "builder",
+          "regular_user",
+          "pm_internal",
+          "pm_external",
+          "admin"
+        ],
+        "POST": [
+          "pm_internal",
+          "pm_external",
+          "admin"
+        ],
+        "PUT": [
+          "pm_internal",
+          "pm_external",
+          "admin"
+        ],
+        "DELETE": [
+          "pm_internal",
+          "admin"
+        ]
+      }
+    },
+    {
       "name": "companies",
       "fields": [
         {
@@ -350,6 +414,7 @@
           "admin"
         ],
         "PUT": [
+          "pm_external",
           "pm_internal",
           "admin"
         ],
@@ -538,6 +603,64 @@
     }
   ],
   "data": {
+    "projectDocuments": [
+      {
+        "id": 1,
+        "projectId": 1001,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1001/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 2,
+        "projectId": 1002,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1002/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 3,
+        "projectId": 1003,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1003/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 4,
+        "projectId": 1004,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1004/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 5,
+        "projectId": 1005,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1005/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 6,
+        "projectId": 1006,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1006/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      },
+      {
+        "id": 7,
+        "projectId": 1007,
+        "title": "Document placeholder 1",
+        "url": "https://example.com/dualforge/projects/1007/document-placeholder-1.pdf",
+        "fileType": "document",
+        "createdAt": "2026-01-13"
+      }
+    ],
     "companies": [
       {
         "id": 1,
@@ -956,7 +1079,7 @@
       {
         "id": 2009,
         "projectId": 1007,
-        "title": "Winter Olympics signing pack – v1",
+        "title": "Winter Olympics signage pack – v1",
         "approvalDeadline": "2026-01-25",
         "deadline": "2026-02-12"
       }
@@ -1059,8 +1182,8 @@
       {
         "id": 3203,
         "buildId": 2009,
-        "title": "signing pack – Corona Cero – not approved",
-        "url": "https://example.com/dualforge/coronacero/signing-pack-v1-notapproved.pdf",
+        "title": "Signage pack – Corona Cero",
+        "url": "https://example.com/dualforge/coronacero/signage-pack-v1.pdf",
         "fileType": "drawing",
         "isApproved": false
       }

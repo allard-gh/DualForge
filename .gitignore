@@ -33,3 +33,6 @@ Thumbs.db
 .parcel-cache/
 
 coverage/
+
+# DualForge internal notes
+docs/_dualforge-dev-notes.md
