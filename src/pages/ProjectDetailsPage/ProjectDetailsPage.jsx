@@ -185,12 +185,17 @@ function ProjectDetailsPage() {
                 if (file.internalApproval) approvalsCount += 1;
                 if (file.partnerApproval) approvalsCount += 1;
 
+                let statusClass = "status--red";
+                if (approvalsCount === 1) statusClass = "status--yellow";
+                if (approvalsCount === 2) statusClass = "status--green";
+
                 const internalName = file.internalApprovedByName ? file.internalApprovedByName : "Unknown";
                 const partnerName = file.partnerApprovedByName ? file.partnerApprovedByName : "Unknown";
 
                 return (
                   <li key={file.id}>
-                    <a href={file.url}>{file.title}</a>
+                    <a href={file.url}>{file.title}</a>{" "}
+                    <span className={`approval-indicator ${statusClass}`}></span>
                     <p className="project-details-page__meta-line">
                       Approvals: {approvalsCount}/2
                     </p>
