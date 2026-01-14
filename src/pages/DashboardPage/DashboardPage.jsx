@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import axios from "axios";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import "./DashboardPage.css";
@@ -25,17 +26,13 @@ function DashboardPage() {
       };
 
       try {
-        const projectsResult = await fetch("https://novi-backend-api-wgsgz.ondigitalocean.app/api/projects", {headers});
-        const projectPartnersResult = await fetch("https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectPartners", {headers});
-        const companiesResult = await fetch("https://novi-backend-api-wgsgz.ondigitalocean.app/api/companies", {headers});
+        const projectsResult = await axios.get("https://novi-backend-api-wgsgz.ondigitalocean.app/api/projects", {headers});
+        const projectPartnersResult = await axios.get("https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectPartners", {headers});
+        const companiesResult = await axios.get("https://novi-backend-api-wgsgz.ondigitalocean.app/api/companies", {headers});
 
-        if (!projectsResult.ok || !projectPartnersResult.ok || !companiesResult.ok) {
-          throw new Error("Failed to fetch dashboard data");
-        }
-
-        const projectsData = await projectsResult.json();
-        const partnersData = await projectPartnersResult.json();
-        const companiesData = await companiesResult.json();
+        const projectsData = projectsResult.data;
+        const partnersData = projectPartnersResult.data;
+        const companiesData = companiesResult.data;
 
         setProjects(projectsData);
         setProjectPartners(partnersData);

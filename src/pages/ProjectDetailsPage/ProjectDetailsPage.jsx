@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import axios from "axios";
 import { useParams } from "react-router-dom";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
 import FallbackImage from "../../assets/images/fallback.svg?react";
@@ -38,42 +39,32 @@ function ProjectDetailsPage() {
       };
 
       try {
-        const projectResult = await fetch(
+        const projectResult = await axios.get(
           `https://novi-backend-api-wgsgz.ondigitalocean.app/api/projects/${projectId}`,
           { headers }
         );
-        const projectPartnersResult = await fetch(
+        const projectPartnersResult = await axios.get(
           "https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectPartners",
           { headers }
         );
-        const companiesResult = await fetch(
+        const companiesResult = await axios.get(
           "https://novi-backend-api-wgsgz.ondigitalocean.app/api/companies",
           { headers }
         );
-        const buildFilesResult = await fetch(
+        const buildFilesResult = await axios.get(
           "https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles",
           { headers }
         );
-        const projectDocumentsResult = await fetch(
+        const projectDocumentsResult = await axios.get(
           "https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectDocuments",
           { headers }
         );
 
-        if (
-          !projectResult.ok ||
-          !projectPartnersResult.ok ||
-          !companiesResult.ok ||
-          !buildFilesResult.ok ||
-          !projectDocumentsResult.ok
-        ) {
-          throw new Error("Failed to fetch project data");
-        }
-
-        const projectData = await projectResult.json();
-        const projectPartnersData = await projectPartnersResult.json();
-        const companiesData = await companiesResult.json();
-        const buildFilesData = await buildFilesResult.json();
-        const projectDocumentsData = await projectDocumentsResult.json();
+        const projectData = projectResult.data;
+        const projectPartnersData = projectPartnersResult.data;
+        const companiesData = companiesResult.data;
+        const buildFilesData = buildFilesResult.data;
+        const projectDocumentsData = projectDocumentsResult.data;
 
         setProject(projectData);
         setProjectPartners(projectPartnersData);

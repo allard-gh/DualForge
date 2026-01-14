@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from "axios";
 import { AuthenticationContext } from './AuthenticationContext';
 
 function AuthenticationContextProvider({ children }) {
@@ -60,29 +61,21 @@ function AuthenticationContextProvider({ children }) {
     setStatus('pending');
 
     try {
-      const response = await fetch('https://novi-backend-api-wgsgz.ondigitalocean.app/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'novi-education-project-id': 'c8c123e6-beb1-4124-9d9f-b3c03ec31a1a',
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "https://novi-backend-api-wgsgz.ondigitalocean.app/api/login",
+        {
           email: credentials.email,
           password: credentials.password,
-        }),
-      });
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "novi-education-project-id": "c8c123e6-beb1-4124-9d9f-b3c03ec31a1a",
+          },
+        }
+      );
 
-      if (!response.ok) {
-        setToken(null);
-        setRole(null);
-        localStorage.removeItem('dualforgeToken');
-        localStorage.removeItem('dualforgeRole');
-        localStorage.removeItem('dualforgeTokenCreatedAt');
-        setStatus('error');
-        return;
-      }
-
-      const result = await response.json();
+      const result = response.data;
       const newToken = result.token;
       const roles = result.user && result.user.roles ? result.user.roles : [];
       const newRole = Array.isArray(roles) && roles.length > 0 ? roles[0] : null;
