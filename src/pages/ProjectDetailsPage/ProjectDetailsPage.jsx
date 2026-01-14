@@ -19,6 +19,8 @@ function ProjectDetailsPage() {
   const [project, setProject] = useState(null);
   const [companies, setCompanies] = useState([]);
   const [projectPartners, setProjectPartners] = useState([]);
+  const [buildFiles, setBuildFiles] = useState([]);
+  const [projectDocuments, setProjectDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
@@ -48,18 +50,36 @@ function ProjectDetailsPage() {
           "https://novi-backend-api-wgsgz.ondigitalocean.app/api/companies",
           { headers }
         );
+        const buildFilesResult = await fetch(
+          "https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles",
+          { headers }
+        );
+        const projectDocumentsResult = await fetch(
+          "https://novi-backend-api-wgsgz.ondigitalocean.app/api/projectDocuments",
+          { headers }
+        );
 
-        if (!projectResult.ok || !projectPartnersResult.ok || !companiesResult.ok) {
+        if (
+          !projectResult.ok ||
+          !projectPartnersResult.ok ||
+          !companiesResult.ok ||
+          !buildFilesResult.ok ||
+          !projectDocumentsResult.ok
+        ) {
           throw new Error("Failed to fetch project data");
         }
 
         const projectData = await projectResult.json();
         const projectPartnersData = await projectPartnersResult.json();
         const companiesData = await companiesResult.json();
+        const buildFilesData = await buildFilesResult.json();
+        const projectDocumentsData = await projectDocumentsResult.json();
 
         setProject(projectData);
         setProjectPartners(projectPartnersData);
         setCompanies(companiesData);
+        setBuildFiles(buildFilesData);
+        setProjectDocuments(projectDocumentsData);
       } catch (error) {
         console.error("Could not fetch project data:", error);
         setHasError(true);
@@ -110,6 +130,12 @@ function ProjectDetailsPage() {
 
   const localCoverImage = localImages[projectId] || null;
 
+  const buildFilesForThisProject =
+    buildFiles.filter((file) => file.projectId === project.id);
+
+  const projectDocumentsForThisProject =
+    projectDocuments.filter((doc) => doc.projectId === project.id);
+
   return (
     <main className="project-details-page">
       <h1>{project.title}</h1>
@@ -149,12 +175,62 @@ function ProjectDetailsPage() {
 
       <section className="project-details-page__lower">
         <div className="project-details-page__placeholder-card">
-          <h2>Approved Builds</h2>
-          <p>No builds available yet.</p>
+          <h2>Builds</h2>
+          {buildFilesForThisProject.length === 0 ? (
+            <p>No build files available yet.</p>
+          ) : (
+            <ul>
+              {buildFilesForThisProject.map((file) => {
+                let approvalsCount = 0;
+                if (file.internalApproval) approvalsCount += 1;
+                if (file.partnerApproval) approvalsCount += 1;
+
+                let statusClass = "status--red";
+                if (approvalsCount === 1) statusClass = "status--yellow";
+                if (approvalsCount === 2) statusClass = "status--green";
+
+                const internalName = file.internalApprovedByName ? file.internalApprovedByName : "Unknown";
+                const partnerName = file.partnerApprovedByName ? file.partnerApprovedByName : "Unknown";
+
+                return (
+                  <li key={file.id}>
+                    <a href={file.url}>{file.title}</a>{" "}
+                    <span className={`approval-indicator ${statusClass}`}></span>
+                    <p className="project-details-page__meta-line">
+                      Approvals: {approvalsCount}/2
+                    </p>
+                    {file.internalApproval && (
+                      <p className="project-details-page__meta-line">
+                        Internal: {internalName} – {file.internalApprovedAt}
+                      </p>
+                    )}
+                    {file.partnerApproval && (
+                      <p className="project-details-page__meta-line">
+                        Partner: {partnerName} – {file.partnerApprovedAt}
+                      </p>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
         </div>
         <div className="project-details-page__placeholder-card">
           <h2>Documents</h2>
-          <p>No documents available yet.</p>
+          {projectDocumentsForThisProject.length === 0 ? (
+            <p>No documents available yet.</p>
+          ) : (
+            <ul>
+              {projectDocumentsForThisProject.map((doc) => (
+                <li key={doc.id}>
+                  <a href={doc.url}>{doc.title}</a>
+                  <p className="project-details-page__meta-line">
+                    {doc.fileType} - {doc.isApproved ? "Approved" : "Not approved"}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </section>
     </main>

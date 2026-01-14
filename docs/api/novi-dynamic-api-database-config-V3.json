@@ -417,9 +417,10 @@
           "default": false
         },
         {
-          "name": "internalApprovedByEmail",
+          "name": "internalApprovedByName",
           "type": "string",
-          "required": false
+          "required": false,
+          "max": 120
         },
         {
           "name": "internalApprovedAt",
@@ -433,9 +434,10 @@
           "default": false
         },
         {
-          "name": "partnerApprovedByEmail",
+          "name": "partnerApprovedByName",
           "type": "string",
-          "required": false
+          "required": false,
+          "max": 120
         },
         {
           "name": "partnerApprovedAt",
@@ -476,31 +478,40 @@
           "required": true
         },
         {
-          "name": "fullName",
+          "name": "firstName",
           "type": "string",
-          "required": true,
-          "min": 2,
-          "max": 80
+          "required": true
+        },
+        {
+          "name": "lastName",
+          "type": "string",
+          "required": true
         },
         {
           "name": "email",
           "type": "string",
-          "required": true,
-          "min": 5,
-          "max": 120
+          "required": true
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "required": true
         },
         {
           "name": "companyName",
           "type": "string",
-          "required": true,
-          "min": 2,
-          "max": 80
+          "required": true
+        },
+        {
+          "name": "roles",
+          "type": "string",
+          "required": false,
+          "default": "pending"
         },
         {
           "name": "message",
           "type": "string",
-          "required": false,
-          "max": 500
+          "required": false
         },
         {
           "name": "status",
@@ -534,112 +545,154 @@
   "users": [
     {
       "id": 1,
+      "firstName": "Admin",
+      "lastName": "User",
       "email": "admin@thebrandbuilders.com",
       "password": "welkom",
+      "companyName": "The Brand Builders",
       "roles": [
         "admin"
       ]
     },
     {
       "id": 2,
+      "firstName": "PM",
+      "lastName": "Internal",
       "email": "pm_internal@thebrandbuilders.com",
       "password": "welkom",
+      "companyName": "The Brand Builders",
       "roles": [
         "pm_internal"
       ]
     },
     {
       "id": 3,
+      "firstName": "Builder",
+      "lastName": "User",
       "email": "builder@thebrandbuilders.com",
       "password": "welkom",
+      "companyName": "The Brand Builders",
       "roles": [
         "builder"
       ]
     },
     {
       "id": 4,
+      "firstName": "Regular",
+      "lastName": "User",
       "email": "regular_user@thebrandbuilders.com",
       "password": "welkom",
+      "companyName": "The Brand Builders",
       "roles": [
         "regular_user"
       ]
     },
     {
       "id": 5,
+      "firstName": "Pending",
+      "lastName": "User",
       "email": "pending@thebrandbuilders.com",
       "password": "welkom",
+      "companyName": "The Brand Builders",
       "roles": [
         "pending"
       ]
     },
     {
       "id": 101,
+      "firstName": "PM",
+      "lastName": "External",
       "email": "pm_external@studioallard.com",
       "password": "welkom",
+      "companyName": "Studio Allard",
       "roles": [
         "pm_external"
       ]
     },
     {
       "id": 102,
+      "firstName": "Regular",
+      "lastName": "User",
       "email": "regular_user@studioallard.com",
       "password": "welkom",
+      "companyName": "Studio Allard",
       "roles": [
         "regular_user"
       ]
     },
     {
       "id": 103,
+      "firstName": "Pending",
+      "lastName": "User",
       "email": "pending@studioallard.com",
       "password": "welkom",
+      "companyName": "Studio Allard",
       "roles": [
         "pending"
       ]
     },
     {
       "id": 111,
+      "firstName": "PM",
+      "lastName": "External",
       "email": "pm_external@eightyfivecreatives.com",
       "password": "welkom",
+      "companyName": "Eighty Five Creatives",
       "roles": [
         "pm_external"
       ]
     },
     {
       "id": 112,
+      "firstName": "Regular",
+      "lastName": "User",
       "email": "regular_user@eightyfivecreatives.com",
       "password": "welkom",
+      "companyName": "Eighty Five Creatives",
       "roles": [
         "regular_user"
       ]
     },
     {
       "id": 113,
+      "firstName": "Pending",
+      "lastName": "User",
       "email": "pending@eightyfivecreatives.com",
       "password": "welkom",
+      "companyName": "Eighty Five Creatives",
       "roles": [
         "pending"
       ]
     },
     {
       "id": 121,
+      "firstName": "PM",
+      "lastName": "External",
       "email": "pm_external@brandwrestlers.com",
       "password": "welkom",
+      "companyName": "Brand Wrestlers",
       "roles": [
         "pm_external"
       ]
     },
     {
       "id": 122,
+      "firstName": "Regular",
+      "lastName": "User",
       "email": "regular_user@brandwrestlers.com",
       "password": "welkom",
+      "companyName": "Brand Wrestlers",
       "roles": [
         "regular_user"
       ]
     },
     {
       "id": 123,
+      "firstName": "Pending",
+      "lastName": "User",
       "email": "pending@brandwrestlers.com",
       "password": "welkom",
+      "companyName": "Brand Wrestlers",
       "roles": [
         "pending"
       ]
@@ -1209,10 +1262,10 @@
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
         "approvedAt": "2021-12-06",
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2021-12-05",
         "partnerApproval": true,
-        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedByName": "Studio Allard PM",
         "partnerApprovedAt": "2021-12-06"
       },
       {
@@ -1226,10 +1279,10 @@
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
         "approvedAt": "2022-07-21",
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2022-07-20",
         "partnerApproval": true,
-        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedByName": "Studio Allard PM",
         "partnerApprovedAt": "2022-07-21"
       },
       {
@@ -1243,10 +1296,10 @@
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
         "approvedAt": "2023-05-11",
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2023-05-10",
         "partnerApproval": true,
-        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedByName": "Studio Allard PM",
         "partnerApprovedAt": "2023-05-11"
       },
       {
@@ -1260,10 +1313,10 @@
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
         "approvedAt": "2024-06-12",
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2024-06-11",
         "partnerApproval": true,
-        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedByName": "Studio Allard PM",
         "partnerApprovedAt": "2024-06-12"
       },
       {
@@ -1277,10 +1330,10 @@
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
         "approvedAt": "2024-12-12",
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2024-12-11",
         "partnerApproval": true,
-        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedByName": "Studio Allard PM",
         "partnerApprovedAt": "2024-12-12"
       },
       {
@@ -1294,10 +1347,10 @@
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
         "approvedAt": "2026-01-10",
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2026-01-08",
         "partnerApproval": true,
-        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedByName": "Studio Allard PM",
         "partnerApprovedAt": "2026-01-10"
       },
       {
@@ -1309,10 +1362,10 @@
         "fileType": "drawing",
         "isApproved": false,
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2026-01-09",
         "partnerApproval": false,
-        "partnerApprovedByEmail": null,
+        "partnerApprovedByName": null,
         "partnerApprovedAt": null
       },
       {
@@ -1324,10 +1377,10 @@
         "fileType": "drawing",
         "isApproved": false,
         "internalApproval": false,
-        "internalApprovedByEmail": null,
+        "internalApprovedByName": null,
         "internalApprovedAt": null,
         "partnerApproval": false,
-        "partnerApprovedByEmail": null,
+        "partnerApprovedByName": null,
         "partnerApprovedAt": null
       },
       {
@@ -1341,10 +1394,10 @@
         "approvedByEmail": "pm_internal@thebrandbuilders.com",
         "approvedAt": "2026-01-09",
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2026-01-08",
         "partnerApproval": true,
-        "partnerApprovedByEmail": "partner@client.com",
+        "partnerApprovedByName": "Studio Allard PM",
         "partnerApprovedAt": "2026-01-09"
       },
       {
@@ -1356,10 +1409,10 @@
         "fileType": "drawing",
         "isApproved": false,
         "internalApproval": true,
-        "internalApprovedByEmail": "pm_internal@thebrandbuilders.com",
+        "internalApprovedByName": "PM Internal",
         "internalApprovedAt": "2026-01-11",
         "partnerApproval": false,
-        "partnerApprovedByEmail": null,
+        "partnerApprovedByName": null,
         "partnerApprovedAt": null
       },
       {
@@ -1371,19 +1424,22 @@
         "fileType": "drawing",
         "isApproved": false,
         "internalApproval": false,
-        "internalApprovedByEmail": null,
+        "internalApprovedByName": null,
         "internalApprovedAt": null,
         "partnerApproval": false,
-        "partnerApprovedByEmail": null,
+        "partnerApprovedByName": null,
         "partnerApprovedAt": null
       }
     ],
     "accessRequests": [
       {
         "id": 1,
-        "fullName": "Example Applicant",
+        "firstName": "Example",
+        "lastName": "Applicant",
         "email": "applicant@example.com",
+        "password": "welkom",
         "companyName": "New Partner Co",
+        "roles": "pending",
         "message": "Ik wil graag toegang tot DualForge voor onze projecten.",
         "status": "pending"
       }
