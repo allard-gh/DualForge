@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import { useParams } from "react-router-dom";
+import axios from "axios";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
 import FallbackImage from "../../assets/images/fallback.svg?react";
 import "./ProjectDetailsPage.css";
@@ -15,7 +15,7 @@ import coronaImg from "../../assets/images/Corona-Cero-Winter-Olympics.jpg";
 
 function ProjectDetailsPage() {
   const { projectId } = useParams();
-  const { token } = useContext(AuthenticationContext);
+  const { token, role } = useContext(AuthenticationContext);
 
   const [project, setProject] = useState(null);
   const [companies, setCompanies] = useState([]);
@@ -60,17 +60,11 @@ function ProjectDetailsPage() {
           { headers }
         );
 
-        const projectData = projectResult.data;
-        const projectPartnersData = projectPartnersResult.data;
-        const companiesData = companiesResult.data;
-        const buildFilesData = buildFilesResult.data;
-        const projectDocumentsData = projectDocumentsResult.data;
-
-        setProject(projectData);
-        setProjectPartners(projectPartnersData);
-        setCompanies(companiesData);
-        setBuildFiles(buildFilesData);
-        setProjectDocuments(projectDocumentsData);
+        setProject(projectResult.data);
+        setProjectPartners(projectPartnersResult.data);
+        setCompanies(companiesResult.data);
+        setBuildFiles(buildFilesResult.data);
+        setProjectDocuments(projectDocumentsResult.data);
       } catch (error) {
         console.error("Could not fetch project data:", error);
         setHasError(true);
@@ -126,6 +120,9 @@ function ProjectDetailsPage() {
 
   const projectDocumentsForThisProject =
     projectDocuments.filter((doc) => doc.projectId === project.id);
+
+  const canApproveInternal = role === "pm_internal" || role === "admin";
+  const canApprovePartner = role === "pm_external" || role === "admin";
 
   return (
     <main className="project-details-page">
@@ -200,6 +197,28 @@ function ProjectDetailsPage() {
                         Partner: {partnerName} – {file.partnerApprovedAt}
                       </p>
                     )}
+                    <div className="approval-actions">
+                      {canApproveInternal && (
+                        <button
+                          type="button"
+                          className="approval-button"
+                          disabled={file.internalApproval}
+                          onClick={() => console.log("TODO: internal approve", file.id)}
+                        >
+                          {file.internalApproval ? "Internal approved" : "Approve internally"}
+                        </button>
+                      )}
+                      {canApprovePartner && (
+                        <button
+                          type="button"
+                          className="approval-button"
+                          disabled={file.partnerApproval}
+                          onClick={() => console.log("TODO: partner approve", file.id)}
+                        >
+                          {file.partnerApproval ? "Partner approved" : "Approve as partner"}
+                        </button>
+                      )}
+                    </div>
                   </li>
                 );
               })}
