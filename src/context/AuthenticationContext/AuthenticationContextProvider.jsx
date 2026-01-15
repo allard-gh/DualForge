@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from "axios";
+import axios from 'axios';
 import { AuthenticationContext } from './AuthenticationContext';
 
 function AuthenticationContextProvider({ children }) {
@@ -35,6 +35,15 @@ function AuthenticationContextProvider({ children }) {
 
   const [status, setStatus] = useState('done');
 
+  function signOut() {
+    setToken(null);
+    setRole(null);
+    localStorage.removeItem('dualforgeToken');
+    localStorage.removeItem('dualforgeRole');
+    localStorage.removeItem('dualforgeTokenCreatedAt');
+    setStatus('done');
+  }
+
   useEffect(() => {
     if (!token) return;
 
@@ -61,19 +70,15 @@ function AuthenticationContextProvider({ children }) {
     setStatus('pending');
 
     try {
-      const response = await axios.post(
-        "https://novi-backend-api-wgsgz.ondigitalocean.app/api/login",
-        {
-          email: credentials.email,
-          password: credentials.password,
+      const response = await axios.post('https://novi-backend-api-wgsgz.ondigitalocean.app/api/login', {
+        email: credentials.email,
+        password: credentials.password,
+      }, {
+        headers: {
+          'Content-Type': 'application/json',
+          'novi-education-project-id': 'c8c123e6-beb1-4124-9d9f-b3c03ec31a1a',
         },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "novi-education-project-id": "c8c123e6-beb1-4124-9d9f-b3c03ec31a1a",
-          },
-        }
-      );
+      });
 
       const result = response.data;
       const newToken = result.token;
@@ -109,15 +114,6 @@ function AuthenticationContextProvider({ children }) {
       localStorage.removeItem('dualforgeTokenCreatedAt');
       setStatus('error');
     }
-  };
-
-  const signOut = () => {
-    setToken(null);
-    setRole(null);
-    localStorage.removeItem('dualforgeToken');
-    localStorage.removeItem('dualforgeRole');
-    localStorage.removeItem('dualforgeTokenCreatedAt');
-    setStatus('done');
   };
 
   const value = {
