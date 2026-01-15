@@ -15,7 +15,7 @@ import coronaImg from "../../assets/images/Corona-Cero-Winter-Olympics.jpg";
 
 function ProjectDetailsPage() {
   const { projectId } = useParams();
-  const { token, role } = useContext(AuthenticationContext);
+  const { token, role, userProfile } = useContext(AuthenticationContext);
 
   const [project, setProject] = useState(null);
   const [companies, setCompanies] = useState([]);
@@ -24,6 +24,15 @@ function ProjectDetailsPage() {
   const [projectDocuments, setProjectDocuments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+
+  const [isUpdatingInternalApproval, setIsUpdatingInternalApproval] = useState(false);
+  const [internalApprovalUpdateError, setInternalApprovalUpdateError] = useState(null);
+  const [internalApprovalUpdatingId, setInternalApprovalUpdatingId] = useState(null);
+
+  const formatDateOnly = (value) => {
+    if (!value) return "";
+    return new Date(value).toLocaleDateString("nl-NL");
+  };
 
   useEffect(() => {
     if (!token || !projectId) return;
@@ -76,6 +85,55 @@ function ProjectDetailsPage() {
     fetchData();
   }, [token, projectId]);
 
+  const handleInternalApprove = async (buildFileId) => {
+    setIsUpdatingInternalApproval(true);
+    setInternalApprovalUpdateError(null);
+    setInternalApprovalUpdatingId(buildFileId);
+
+    const fileToUpdate = buildFiles.find((f) => f.id === buildFileId);
+    if (!fileToUpdate) {
+      setInternalApprovalUpdateError("Build file not found.");
+      setIsUpdatingInternalApproval(false);
+      setInternalApprovalUpdatingId(null);
+      return;
+    }
+
+    const fullName = userProfile?.displayName || userProfile?.email || "Unknown user";
+
+    const updatePayload = {
+      ...fileToUpdate,
+      internalApproval: true,
+      internalApprovedAt: new Date().toISOString(),
+      internalApprovedByName: fullName,
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "novi-education-project-id": "c8c123e6-beb1-4124-9d9f-b3c03ec31a1a",
+      Authorization: `Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.put(
+        `https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles/${buildFileId}`,
+        updatePayload,
+        { headers }
+      );
+
+      const updatedItem = response.data || updatePayload;
+
+      setBuildFiles((prev) =>
+        prev.map((item) => (item.id === buildFileId ? updatedItem : item))
+      );
+    } catch (error) {
+      console.error("Could not update internal approval:", error);
+      setInternalApprovalUpdateError("Failed to approve. Please try again.");
+    } finally {
+      setIsUpdatingInternalApproval(false);
+      setInternalApprovalUpdatingId(null);
+    }
+  };
+
   if (isLoading) {
     return (
       <main className="project-details-page">
@@ -116,7 +174,7 @@ function ProjectDetailsPage() {
   const localCoverImage = localImages[projectId] || null;
 
   const buildFilesForThisProject =
-    buildFiles.filter((file) => file.projectId === project.id);
+    buildFiles.filter((file) => Number(file.projectId) === Number(project.id));
 
   const projectDocumentsForThisProject =
     projectDocuments.filter((doc) => doc.projectId === project.id);
@@ -164,6 +222,11 @@ function ProjectDetailsPage() {
       <section className="project-details-page__lower">
         <div className="project-details-page__placeholder-card">
           <h2>Builds</h2>
+          {internalApprovalUpdateError && (
+            <p className="project-details-page__error-message">
+              {internalApprovalUpdateError}
+            </p>
+          )}
           {buildFilesForThisProject.length === 0 ? (
             <p>No build files available yet.</p>
           ) : (
@@ -177,7 +240,6 @@ function ProjectDetailsPage() {
                 if (approvalsCount === 1) statusClass = "status--yellow";
                 if (approvalsCount === 2) statusClass = "status--green";
 
-                const internalName = file.internalApprovedByName ? file.internalApprovedByName : "Unknown";
                 const partnerName = file.partnerApprovedByName ? file.partnerApprovedByName : "Unknown";
 
                 return (
@@ -189,7 +251,7 @@ function ProjectDetailsPage() {
                     </p>
                     {file.internalApproval && (
                       <p className="project-details-page__meta-line">
-                        Internal: {internalName} – {file.internalApprovedAt}
+                        Internal: {file.internalApprovedByName} – {formatDateOnly(file.internalApprovedAt)}
                       </p>
                     )}
                     {file.partnerApproval && (
@@ -202,10 +264,17 @@ function ProjectDetailsPage() {
                         <button
                           type="button"
                           className="approval-button"
-                          disabled={file.internalApproval}
-                          onClick={() => console.log("TODO: internal approve", file.id)}
+                          disabled={
+                            file.internalApproval ||
+                            internalApprovalUpdatingId === file.id
+                          }
+                          onClick={() => handleInternalApprove(file.id)}
                         >
-                          {file.internalApproval ? "Internal approved" : "Approve internally"}
+                          {internalApprovalUpdatingId === file.id
+                            ? "Processing..."
+                            : file.internalApproval
+                            ? "Internal approved"
+                            : "Approve internally"}
                         </button>
                       )}
                       {canApprovePartner && (

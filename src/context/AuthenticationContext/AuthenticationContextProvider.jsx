@@ -33,14 +33,21 @@ function AuthenticationContextProvider({ children }) {
     return localStorage.getItem('dualforgeRole') || null;
   });
 
+  const [userProfile, setUserProfile] = useState(() => {
+    const savedProfile = localStorage.getItem('dualforgeUserProfile');
+    return savedProfile ? JSON.parse(savedProfile) : null;
+  });
+
   const [status, setStatus] = useState('done');
 
   function signOut() {
     setToken(null);
     setRole(null);
+    setUserProfile(null);
     localStorage.removeItem('dualforgeToken');
     localStorage.removeItem('dualforgeRole');
     localStorage.removeItem('dualforgeTokenCreatedAt');
+    localStorage.removeItem('dualforgeUserProfile');
     setStatus('done');
   }
 
@@ -97,6 +104,33 @@ function AuthenticationContextProvider({ children }) {
 
       setToken(newToken);
       setRole(newRole);
+
+            try {
+        const profilesResponse = await axios.get('https://novi-backend-api-wgsgz.ondigitalocean.app/api/profiles', {
+          headers: {
+            'Authorization': `Bearer ${newToken}`,
+            'novi-education-project-id': 'c8c123e6-beb1-4124-9d9f-b3c03ec31a1a',
+          },
+        });
+
+        const profiles = profilesResponse.data;
+        const normalizedEmail = credentials.email.trim().toLowerCase();
+        const currentProfile = profiles.find(p => (p.email || "").trim().toLowerCase() === normalizedEmail);
+
+        const profileData = {
+          displayName: currentProfile?.displayName || "",
+          email: currentProfile?.email || credentials.email
+        };
+
+        setUserProfile(profileData);
+        localStorage.setItem('dualforgeUserProfile', JSON.stringify(profileData));
+      } catch (profileError) {
+        console.error("Could not fetch user profile:", profileError);
+        const fallbackProfile = { displayName: "", email: credentials.email };
+        setUserProfile(fallbackProfile);
+        localStorage.setItem('dualforgeUserProfile', JSON.stringify(fallbackProfile));
+      }
+
       setStatus('done');
 
       localStorage.setItem('dualforgeToken', newToken);
@@ -109,9 +143,11 @@ function AuthenticationContextProvider({ children }) {
     } catch (error) {
       setToken(null);
       setRole(null);
+      setUserProfile(null);
       localStorage.removeItem('dualforgeToken');
       localStorage.removeItem('dualforgeRole');
       localStorage.removeItem('dualforgeTokenCreatedAt');
+      localStorage.removeItem('dualforgeUserProfile');
       setStatus('error');
     }
   };
@@ -120,6 +156,7 @@ function AuthenticationContextProvider({ children }) {
     isUserAuthenticated,
     token,
     role,
+    userProfile,
     status,
     signIn,
     signOut,
