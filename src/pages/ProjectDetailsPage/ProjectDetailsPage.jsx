@@ -29,6 +29,10 @@ function ProjectDetailsPage() {
   const [internalApprovalUpdateError, setInternalApprovalUpdateError] = useState(null);
   const [internalApprovalUpdatingId, setInternalApprovalUpdatingId] = useState(null);
 
+  const [isUpdatingPartnerApproval, setIsUpdatingPartnerApproval] = useState(false);
+  const [partnerApprovalUpdateError, setPartnerApprovalUpdateError] = useState(null);
+  const [partnerApprovalUpdatingId, setPartnerApprovalUpdatingId] = useState(null);
+
   const formatDateOnly = (value) => {
     if (!value) return "";
     return new Date(value).toLocaleDateString("nl-NL");
@@ -134,6 +138,56 @@ function ProjectDetailsPage() {
     }
   };
 
+  const handlePartnerApprove = async (buildFileId) => {
+    setIsUpdatingPartnerApproval(true);
+    setPartnerApprovalUpdateError(null);
+    const numericBuildFileId = Number(buildFileId);
+    setPartnerApprovalUpdatingId(numericBuildFileId);
+
+    const fileToUpdate = buildFiles.find((f) => Number(f.id) === numericBuildFileId);
+    if (!fileToUpdate) {
+      setPartnerApprovalUpdateError("Build file not found.");
+      setIsUpdatingPartnerApproval(false);
+      setPartnerApprovalUpdatingId(null);
+      return;
+    }
+
+    const partnerName = userProfile?.displayName || userProfile?.email || "Unknown user";
+
+    const updatePayload = {
+      ...fileToUpdate,
+      partnerApproval: true,
+      partnerApprovedAt: new Date().toISOString(),
+      partnerApprovedByName: partnerName,
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      "novi-education-project-id": "c8c123e6-beb1-4124-9d9f-b3c03ec31a1a",
+      Authorization: `Bearer ${token}`,
+    };
+
+    try {
+      const response = await axios.put(
+        `https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles/${numericBuildFileId}`,
+        updatePayload,
+        { headers }
+      );
+
+      const updatedItem = response.data || updatePayload;
+
+      setBuildFiles((prev) =>
+        prev.map((item) => (Number(item.id) === numericBuildFileId ? updatedItem : item))
+      );
+    } catch (error) {
+      console.error("Could not update partner approval:", error);
+      setPartnerApprovalUpdateError("Failed to approve. Please try again.");
+    } finally {
+      setIsUpdatingPartnerApproval(false);
+      setPartnerApprovalUpdatingId(null);
+    }
+  };
+
   if (isLoading) {
     return (
       <main className="project-details-page">
@@ -177,7 +231,7 @@ function ProjectDetailsPage() {
     buildFiles.filter((file) => Number(file.projectId) === Number(project.id));
 
   const projectDocumentsForThisProject =
-    projectDocuments.filter((doc) => doc.projectId === project.id);
+    projectDocuments.filter((doc) => Number(doc.projectId) === Number(project.id));
 
   const canApproveInternal = role === "pm_internal" || role === "admin";
   const canApprovePartner = role === "pm_external" || role === "admin";
@@ -227,6 +281,11 @@ function ProjectDetailsPage() {
               {internalApprovalUpdateError}
             </p>
           )}
+          {partnerApprovalUpdateError && (
+            <p className="project-details-page__error-message">
+              {partnerApprovalUpdateError}
+            </p>
+          )}
           {buildFilesForThisProject.length === 0 ? (
             <p>No build files available yet.</p>
           ) : (
@@ -239,8 +298,6 @@ function ProjectDetailsPage() {
                 let statusClass = "status--red";
                 if (approvalsCount === 1) statusClass = "status--yellow";
                 if (approvalsCount === 2) statusClass = "status--green";
-
-                const partnerName = file.partnerApprovedByName ? file.partnerApprovedByName : "Unknown";
 
                 return (
                   <li key={file.id}>
@@ -256,7 +313,7 @@ function ProjectDetailsPage() {
                     )}
                     {file.partnerApproval && (
                       <p className="project-details-page__meta-line">
-                        Partner: {partnerName} – {file.partnerApprovedAt}
+                        Partner: {file.partnerApprovedByName} – {formatDateOnly(file.partnerApprovedAt)}
                       </p>
                     )}
                     <div className="approval-actions">
@@ -281,10 +338,17 @@ function ProjectDetailsPage() {
                         <button
                           type="button"
                           className="approval-button"
-                          disabled={file.partnerApproval}
-                          onClick={() => console.log("TODO: partner approve", file.id)}
+                          disabled={
+                            file.partnerApproval ||
+                            partnerApprovalUpdatingId === file.id
+                          }
+                          onClick={() => handlePartnerApprove(file.id)}
                         >
-                          {file.partnerApproval ? "Partner approved" : "Approve as partner"}
+                          {partnerApprovalUpdatingId === file.id
+                            ? "Processing..."
+                            : file.partnerApproval
+                            ? "Partner approved"
+                            : "Approve as partner"}
                         </button>
                       )}
                     </div>
