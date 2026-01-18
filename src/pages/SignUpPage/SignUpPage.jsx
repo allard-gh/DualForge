@@ -1,16 +1,26 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
+import { ROUTES } from "../../constants/routes";
+import Button from "../../components/Button/Button";
 import "./SignUpPage.css";
 
 function SignUpPage() {
   const [successMessage, setSuccessMessage] = useState("");
-  const { signIn } = useContext(AuthenticationContext);
+  const { signIn, isUserAuthenticated } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (isUserAuthenticated) {
+      navigate(ROUTES.DASHBOARD);
+    }
+  }, [isUserAuthenticated, navigate]);
 
   const onSubmit = (data) => {
     signIn();
@@ -73,7 +83,7 @@ function SignUpPage() {
           {errors.password && <span>{errors.password.message}</span>}
         </div>
 
-        <button type="submit">Sign Up</button>
+        <Button type="submit">Sign Up</Button>
       </form>
 
       {successMessage && <p>{successMessage}</p>}

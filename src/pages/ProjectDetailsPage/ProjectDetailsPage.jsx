@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
+import Button from "../../components/Button/Button";
 import FallbackImage from "../../assets/images/fallback.svg?react";
 import "./ProjectDetailsPage.css";
 
@@ -318,7 +319,7 @@ function ProjectDetailsPage() {
                     )}
                     <div className="approval-actions">
                       {canApproveInternal && (
-                        <button
+                        <Button
                           type="button"
                           className="approval-button"
                           disabled={
@@ -332,10 +333,10 @@ function ProjectDetailsPage() {
                             : file.internalApproval
                             ? "Internal approved"
                             : "Approve internally"}
-                        </button>
+                        </Button>
                       )}
                       {canApprovePartner && (
-                        <button
+                        <Button
                           type="button"
                           className="approval-button"
                           disabled={
@@ -349,7 +350,7 @@ function ProjectDetailsPage() {
                             : file.partnerApproval
                             ? "Partner approved"
                             : "Approve as partner"}
-                        </button>
+                        </Button>
                       )}
                     </div>
                   </li>

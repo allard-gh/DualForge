@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../../constants/routes';
 import { AuthenticationContext } from '../../../context/AuthenticationContext/AuthenticationContext.js';
+import Button from '../../Button/Button';
 import './SidebarLayout.css';
 
 function SidebarLayout({ children }) {
@@ -28,7 +29,7 @@ function SidebarLayout({ children }) {
         </ul>
         {isUserAuthenticated && (
           <div className="sidebar-footer">
-            <button type="button" onClick={handleSignOut} className="sign-out-button">Sign Out</button>
+            <Button type="button" onClick={handleSignOut} className="sign-out-button">Sign Out</Button>
           </div>
         )}
       </nav>
