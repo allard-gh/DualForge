@@ -1,12 +1,13 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
 import { ROUTES } from "../../constants/routes";
+import Button from "../../components/Button/Button";
 import "./SignInPage.css";
 
 function SignInPage() {
-  const { signIn, status } = useContext(AuthenticationContext);
+  const { signIn, status, isUserAuthenticated } = useContext(AuthenticationContext);
   const navigate = useNavigate();
   const {
     register,
@@ -14,11 +15,14 @@ function SignInPage() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async (data) => {
-    await signIn(data);
-    if (localStorage.getItem("dualforgeToken")) {
+  useEffect(() => {
+    if (isUserAuthenticated) {
       navigate(ROUTES.DASHBOARD);
     }
+  }, [isUserAuthenticated, navigate]);
+
+  const onSubmit = async (data) => {
+    await signIn(data);
   };
 
   return (
@@ -48,7 +52,7 @@ function SignInPage() {
         </div>
 
         {status === "error" && <p className="error-message">Login failed. Check your credentials and try again</p>}
-        <button type="submit">Sign In</button>
+        <Button type="submit">Sign In</Button>
       </form>
     </main>
   );
