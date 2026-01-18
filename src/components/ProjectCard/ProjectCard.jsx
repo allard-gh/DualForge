@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './ProjectCard.css';
 import FallbackImage from '../../assets/images/fallback.svg?react';
 import top2000Img from '../../assets/images/Top-2000-cafe.jpg';
@@ -11,9 +10,8 @@ import moetImg from '../../assets/images/moet_red_limited_edition.jpg';
 import coronaImg from '../../assets/images/Corona-Cero-Winter-Olympics.jpg';
 import { getProjectStatusColor } from '../../helpers/getProjectStatusColor';
 
-const ProjectCard = ({ title, client, partners, deadline, status, coverImage, projectId }) => {
+const ProjectCard = ({ title, client, partners, deadline, status, coverImage, projectId, onOpenProject }) => {
   const statusColor = getProjectStatusColor(status, deadline);
-  const navigate = useNavigate();
 
   const localImages = {
     1001: top2000Img,
@@ -28,7 +26,9 @@ const ProjectCard = ({ title, client, partners, deadline, status, coverImage, pr
   const localCoverImage = localImages[projectId];
 
   const handleGoToProject = () => {
-    navigate(`/projects/${projectId}`);
+    if (onOpenProject) {
+      onOpenProject(projectId);
+    }
   };
 
   return (

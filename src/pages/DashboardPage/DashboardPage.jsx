@@ -1,11 +1,14 @@
 import { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
+import { ROUTES } from "../../constants/routes";
 import ProjectCard from "../../components/ProjectCard/ProjectCard";
 import "./DashboardPage.css";
 
 function DashboardPage() {
   const {token} = useContext(AuthenticationContext);
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [projectPartners, setProjectPartners] = useState([]);
   const [companies, setCompanies] = useState([]);
@@ -48,6 +51,10 @@ function DashboardPage() {
     fetchData();
   }, [token]);
 
+  const handleOpenProject = (projectId) => {
+    navigate(ROUTES.PROJECT_DETAILS.replace(":projectId", projectId));
+  };
+
   return (
     <main className="dashboard-page">
       <h1>Dashboard</h1>
@@ -84,6 +91,7 @@ function DashboardPage() {
                     deadline={project.deadline || ""}
                     status={project.status || ""}
                     coverImage={project.coverImage}
+                    onOpenProject={handleOpenProject}
                   />
                 );
               })}
