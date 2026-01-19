@@ -39,6 +39,7 @@ function SignUpPage() {
             id="firstName"
             type="text"
             {...register("firstName", { required: "First name is required" })}
+
           />
           {errors.firstName && <span>{errors.firstName.message}</span>}
         </div>
