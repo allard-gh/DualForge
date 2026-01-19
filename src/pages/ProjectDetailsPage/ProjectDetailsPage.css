@@ -48,17 +48,8 @@
 }
 
 .approval-indicator {
-  display: inline-block;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
   margin-left: 8px;
-  vertical-align: middle;
 }
-
-.status--red { background-color: #C94A4A; }
-.status--yellow { background-color: #E6BF6A; }
-.status--green { background-color: #2FA36A; }
 
 .approval-actions {
   display: flex;

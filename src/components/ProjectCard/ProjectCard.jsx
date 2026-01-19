@@ -1,5 +1,6 @@
 import React from 'react';
 import './ProjectCard.css';
+import StatusIndicator from '../StatusIndicator/StatusIndicator';
 import FallbackImage from '../../assets/images/fallback.svg?react';
 import top2000Img from '../../assets/images/Top-2000-cafe.jpg';
 import mysterylandImg from '../../assets/images/mysteryland-haarlemmermeer.jpg';
@@ -11,8 +12,6 @@ import coronaImg from '../../assets/images/Corona-Cero-Winter-Olympics.jpg';
 import { getProjectStatusColor } from '../../helpers/getProjectStatusColor';
 
 const ProjectCard = ({ title, client, partners, deadline, status, coverImage, projectId, onOpenProject }) => {
-  const statusColor = getProjectStatusColor(status, deadline);
-
   const localImages = {
     1001: top2000Img,
     1002: mysterylandImg,
@@ -25,6 +24,21 @@ const ProjectCard = ({ title, client, partners, deadline, status, coverImage, pr
 
   const localCoverImage = localImages[projectId];
 
+  // Calculate project status color using the helper
+  const statusColor = getProjectStatusColor(status, deadline);
+
+  // Map the hex color to a semantic variant for the StatusIndicator
+  let projectStatusVariant = "yellow";
+  if (statusColor === "#2FA36A") {
+    projectStatusVariant = "green";
+  } else if (statusColor === "#E6BF6A") {
+    projectStatusVariant = "yellow";
+  } else if (statusColor === "#FF7A29") {
+    projectStatusVariant = "orange";
+  } else if (statusColor === "#C94A4A") {
+    projectStatusVariant = "red";
+  }
+
   const handleGoToProject = () => {
     if (onOpenProject) {
       onOpenProject(projectId);
@@ -34,10 +48,10 @@ const ProjectCard = ({ title, client, partners, deadline, status, coverImage, pr
   return (
     <article className="project-card">
       <div className="project-card__image-container">
-        <div
+        <StatusIndicator
+          variant={projectStatusVariant}
           className="project-card__status-indicator"
-          style={{ backgroundColor: statusColor }}
-        ></div>
+        />
         {coverImage ? (
           <img
             src={coverImage}

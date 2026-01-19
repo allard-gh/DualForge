@@ -1,0 +1,12 @@
+.status-indicator {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+
+.status-indicator--red { background-color: #C94A4A; }
+.status-indicator--orange { background-color: #FF7A29; }
+.status-indicator--yellow { background-color: #E6BF6A; }
+.status-indicator--green { background-color: #2FA36A; }

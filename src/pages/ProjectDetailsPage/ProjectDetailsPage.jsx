@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { AuthenticationContext } from "../../context/AuthenticationContext/AuthenticationContext.js";
 import Button from "../../components/Button/Button";
+import StatusIndicator from "../../components/StatusIndicator/StatusIndicator";
 import FallbackImage from "../../assets/images/fallback.svg?react";
 import "./ProjectDetailsPage.css";
 
@@ -26,11 +27,9 @@ function ProjectDetailsPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
 
-  const [isUpdatingInternalApproval, setIsUpdatingInternalApproval] = useState(false);
   const [internalApprovalUpdateError, setInternalApprovalUpdateError] = useState(null);
   const [internalApprovalUpdatingId, setInternalApprovalUpdatingId] = useState(null);
 
-  const [isUpdatingPartnerApproval, setIsUpdatingPartnerApproval] = useState(false);
   const [partnerApprovalUpdateError, setPartnerApprovalUpdateError] = useState(null);
   const [partnerApprovalUpdatingId, setPartnerApprovalUpdatingId] = useState(null);
 
@@ -91,21 +90,19 @@ function ProjectDetailsPage() {
   }, [token, projectId]);
 
   const handleInternalApprove = async (buildFileId) => {
-    setIsUpdatingInternalApproval(true);
     setInternalApprovalUpdateError(null);
     setInternalApprovalUpdatingId(buildFileId);
 
     const fileToUpdate = buildFiles.find((f) => f.id === buildFileId);
     if (!fileToUpdate) {
       setInternalApprovalUpdateError("Build file not found.");
-      setIsUpdatingInternalApproval(false);
       setInternalApprovalUpdatingId(null);
       return;
     }
 
     const fullName = userProfile?.displayName || userProfile?.email || "Unknown user";
 
-    const updatePayload = {
+    const updatedBuildFile = {
       ...fileToUpdate,
       internalApproval: true,
       internalApprovedAt: new Date().toISOString(),
@@ -121,11 +118,11 @@ function ProjectDetailsPage() {
     try {
       const response = await axios.put(
         `https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles/${buildFileId}`,
-        updatePayload,
+        updatedBuildFile,
         { headers }
       );
 
-      const updatedItem = response.data || updatePayload;
+      const updatedItem = response.data || updatedBuildFile;
 
       setBuildFiles((prev) =>
         prev.map((item) => (item.id === buildFileId ? updatedItem : item))
@@ -134,28 +131,24 @@ function ProjectDetailsPage() {
       console.error("Could not update internal approval:", error);
       setInternalApprovalUpdateError("Failed to approve. Please try again.");
     } finally {
-      setIsUpdatingInternalApproval(false);
       setInternalApprovalUpdatingId(null);
     }
   };
 
   const handlePartnerApprove = async (buildFileId) => {
-    setIsUpdatingPartnerApproval(true);
     setPartnerApprovalUpdateError(null);
-    const numericBuildFileId = Number(buildFileId);
-    setPartnerApprovalUpdatingId(numericBuildFileId);
+    setPartnerApprovalUpdatingId(buildFileId);
 
-    const fileToUpdate = buildFiles.find((f) => Number(f.id) === numericBuildFileId);
+    const fileToUpdate = buildFiles.find((f) => f.id === buildFileId);
     if (!fileToUpdate) {
       setPartnerApprovalUpdateError("Build file not found.");
-      setIsUpdatingPartnerApproval(false);
       setPartnerApprovalUpdatingId(null);
       return;
     }
 
     const partnerName = userProfile?.displayName || userProfile?.email || "Unknown user";
 
-    const updatePayload = {
+    const updatedBuildFile = {
       ...fileToUpdate,
       partnerApproval: true,
       partnerApprovedAt: new Date().toISOString(),
@@ -170,21 +163,20 @@ function ProjectDetailsPage() {
 
     try {
       const response = await axios.put(
-        `https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles/${numericBuildFileId}`,
-        updatePayload,
+        `https://novi-backend-api-wgsgz.ondigitalocean.app/api/buildFiles/${buildFileId}`,
+        updatedBuildFile,
         { headers }
       );
 
-      const updatedItem = response.data || updatePayload;
+      const updatedItem = response.data || updatedBuildFile;
 
       setBuildFiles((prev) =>
-        prev.map((item) => (Number(item.id) === numericBuildFileId ? updatedItem : item))
+        prev.map((item) => (item.id === buildFileId ? updatedItem : item))
       );
     } catch (error) {
       console.error("Could not update partner approval:", error);
       setPartnerApprovalUpdateError("Failed to approve. Please try again.");
     } finally {
-      setIsUpdatingPartnerApproval(false);
       setPartnerApprovalUpdatingId(null);
     }
   };
@@ -296,14 +288,17 @@ function ProjectDetailsPage() {
                 if (file.internalApproval) approvalsCount += 1;
                 if (file.partnerApproval) approvalsCount += 1;
 
-                let statusClass = "status--red";
-                if (approvalsCount === 1) statusClass = "status--yellow";
-                if (approvalsCount === 2) statusClass = "status--green";
+                let approvalVariant = "red";
+                if (approvalsCount === 1) approvalVariant = "yellow";
+                if (approvalsCount === 2) approvalVariant = "green";
 
                 return (
                   <li key={file.id}>
                     <a href={file.url}>{file.title}</a>{" "}
-                    <span className={`approval-indicator ${statusClass}`}></span>
+                    <StatusIndicator
+                      variant={approvalVariant}
+                      className="approval-indicator"
+                    />
                     <p className="project-details-page__meta-line">
                       Approvals: {approvalsCount}/2
                     </p>
