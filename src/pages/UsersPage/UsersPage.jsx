@@ -156,20 +156,15 @@ function UsersPage() {
                 <td>
                   <div className="user-actions">
                     <Button
-                      onClick={() => {
-                        console.log("TODO: change role", {
-                          userId: user.id,
-                          email: user.email,
-                          oldRole: currentRole,
-                          newRole: selectedRole,
-                        });
-                      }}
-                      disabled={selectedRole === currentRole}
+                      onClick={() => {}}
+                      disabled={true}
                     >
-                      Change role
+                      Role change not available yet
                     </Button>
                     <Button
-                      onClick={() => console.log('Delete user:', user.id, user.email)}
+                      onClick={() => {}}
+                      disabled={true}
+                      className="button-danger"
                     >
                       Delete user
                     </Button>
