@@ -1,3 +1,36 @@
 .users-page {
   padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.5rem;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.users-table th,
+.users-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.users-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.user-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.error-message {
+  color: #c94a4a;
+  font-weight: 500;
 }

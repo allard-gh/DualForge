@@ -91,12 +91,20 @@ function App() {
       <Route
         path={ROUTES.USERS}
         element={
-          isUserAuthenticated && role === 'admin' ? (
-            <SidebarLayout>
-              <UsersPage />
-            </SidebarLayout>
+          isUserAuthenticated ? (
+            role === 'admin' ? (
+              <SidebarLayout>
+                <UsersPage />
+              </SidebarLayout>
+            ) : (
+              <SidebarLayout>
+                <main style={{ padding: '2rem' }}>
+                  <p>You do not have access to this page.</p>
+                </main>
+              </SidebarLayout>
+            )
           ) : (
-            <Navigate to={ROUTES.DASHBOARD} replace />
+            <Navigate to={ROUTES.SIGN_IN} replace />
           )
         }
       />

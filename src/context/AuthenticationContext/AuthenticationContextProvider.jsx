@@ -105,28 +105,36 @@ function AuthenticationContextProvider({ children }) {
       setToken(newToken);
       setRole(newRole);
 
-            try {
-        const profilesResponse = await axios.get('https://novi-backend-api-wgsgz.ondigitalocean.app/api/profiles', {
+      try {
+        const profilesResult = await axios.get('https://novi-backend-api-wgsgz.ondigitalocean.app/api/profiles', {
           headers: {
             'Authorization': `Bearer ${newToken}`,
             'novi-education-project-id': 'c8c123e6-beb1-4124-9d9f-b3c03ec31a1a',
           },
         });
 
-        const profiles = profilesResponse.data;
+        const profiles = profilesResult.data;
         const normalizedEmail = credentials.email.trim().toLowerCase();
         const currentProfile = profiles.find(p => (p.email || "").trim().toLowerCase() === normalizedEmail);
 
         const profileData = {
+          firstName: currentProfile?.firstName || "",
+          lastName: currentProfile?.lastName || "",
           displayName: currentProfile?.displayName || "",
-          email: currentProfile?.email || credentials.email
+          email: currentProfile?.email || credentials.email,
+          companyId: currentProfile?.companyId || null
         };
 
         setUserProfile(profileData);
         localStorage.setItem('dualforgeUserProfile', JSON.stringify(profileData));
-      } catch (profileError) {
-        console.error("Could not fetch user profile:", profileError);
-        const fallbackProfile = { displayName: "", email: credentials.email };
+      } catch (error) {
+        console.error("Could not fetch user profile:", error);
+        const fallbackProfile = {
+          firstName: "",
+          lastName: "",
+          displayName: "",
+          email: credentials.email
+        };
         setUserProfile(fallbackProfile);
         localStorage.setItem('dualforgeUserProfile', JSON.stringify(fallbackProfile));
       }
