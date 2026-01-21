@@ -30,8 +30,14 @@
   margin-bottom: 1.5rem;
 }
 
-.project-details-page__meta p {
+.project-details-page__details p {
   margin: 0.5rem 0;
+}
+
+.project-details-page__detail-item {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+  color: #666;
 }
 
 .project-details-page__lower {

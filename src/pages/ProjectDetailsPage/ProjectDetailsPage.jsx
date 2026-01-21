@@ -100,7 +100,14 @@ function ProjectDetailsPage() {
       return;
     }
 
-    const fullName = userProfile?.displayName || userProfile?.email || "Unknown user";
+    let fullName = "Unknown user";
+    if (userProfile?.firstName && userProfile?.lastName) {
+      fullName = `${userProfile.firstName} ${userProfile.lastName}`;
+    } else if (userProfile?.displayName) {
+      fullName = userProfile.displayName;
+    } else if (userProfile?.email) {
+      fullName = userProfile.email;
+    }
 
     const updatedBuildFile = {
       ...fileToUpdate,
@@ -146,7 +153,14 @@ function ProjectDetailsPage() {
       return;
     }
 
-    const partnerName = userProfile?.displayName || userProfile?.email || "Unknown user";
+    let partnerName = "Unknown user";
+    if (userProfile?.firstName && userProfile?.lastName) {
+      partnerName = `${userProfile.firstName} ${userProfile.lastName}`;
+    } else if (userProfile?.displayName) {
+      partnerName = userProfile.displayName;
+    } else if (userProfile?.email) {
+      partnerName = userProfile.email;
+    }
 
     const updatedBuildFile = {
       ...fileToUpdate,
@@ -248,7 +262,7 @@ function ProjectDetailsPage() {
           <p className="project-details-page__description">
             {project.description || "No description available."}
           </p>
-          <div className="project-details-page__meta">
+          <div className="project-details-page__details">
             <p>
               <strong>Client:</strong> {clientName}
             </p>
@@ -299,16 +313,16 @@ function ProjectDetailsPage() {
                       variant={approvalVariant}
                       className="approval-indicator"
                     />
-                    <p className="project-details-page__meta-line">
+                    <p className="project-details-page__detail-item">
                       Approvals: {approvalsCount}/2
                     </p>
                     {file.internalApproval && (
-                      <p className="project-details-page__meta-line">
+                      <p className="project-details-page__detail-item">
                         Internal: {file.internalApprovedByName} – {formatDateOnly(file.internalApprovedAt)}
                       </p>
                     )}
                     {file.partnerApproval && (
-                      <p className="project-details-page__meta-line">
+                      <p className="project-details-page__detail-item">
                         Partner: {file.partnerApprovedByName} – {formatDateOnly(file.partnerApprovedAt)}
                       </p>
                     )}
@@ -363,8 +377,8 @@ function ProjectDetailsPage() {
               {projectDocumentsForThisProject.map((doc) => (
                 <li key={doc.id}>
                   <a href={doc.url}>{doc.title}</a>
-                  <p className="project-details-page__meta-line">
-                    {doc.fileType} - {doc.isApproved ? "Approved" : "Not approved"}
+                  <p className="project-details-page__detail-item">
+                    {doc.fileType}
                   </p>
                 </li>
               ))}
