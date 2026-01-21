@@ -4,6 +4,15 @@ import { AuthenticationContext } from '../../context/AuthenticationContext/Authe
 import Button from '../../components/Button/Button';
 import './UsersPage.css';
 
+const availableRoles = [
+  { value: "admin", label: "Admin" },
+  { value: "pm_internal", label: "PM Internal" },
+  { value: "pm_external", label: "PM External" },
+  { value: "regular_user", label: "Regular user" },
+  { value: "pending", label: "Pending" },
+  { value: "builder", label: "Builder" },
+];
+
 function UsersPage() {
   const { token, role } = useContext(AuthenticationContext);
   const [users, setUsers] = useState([]);
@@ -11,6 +20,7 @@ function UsersPage() {
   const [companies, setCompanies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [selectedRolesByUserId, setSelectedRolesByUserId] = useState({});
 
   useEffect(() => {
     if (!token) return;
@@ -109,29 +119,65 @@ function UsersPage() {
           </tr>
         </thead>
         <tbody>
-          {usersForDisplay.map((user) => (
-            <tr key={user.id}>
-              <td>{user.firstName}</td>
-              <td>{user.lastName}</td>
-              <td>{user.companyName}</td>
-              <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td>
-                <div className="user-actions">
-                  <Button
-                    onClick={() => console.log('Change role for:', user.id, user.email)}
+          {usersForDisplay.map((user) => {
+            const currentRole = user.role;
+            const selectedRole = selectedRolesByUserId[user.id] || currentRole;
+            const isUnknownRole = !availableRoles.some(r => r.value === currentRole);
+
+            return (
+              <tr key={user.id}>
+                <td>{user.firstName}</td>
+                <td>{user.lastName}</td>
+                <td>{user.companyName}</td>
+                <td>{user.email}</td>
+                <td>
+                  <select
+                    value={selectedRole}
+                    onChange={(e) => {
+                      const newRoleValue = e.target.value;
+                      setSelectedRolesByUserId({
+                        ...selectedRolesByUserId,
+                        [user.id]: newRoleValue,
+                      });
+                    }}
                   >
-                    Change role
-                  </Button>
-                  <Button
-                    onClick={() => console.log('Delete user:', user.id, user.email)}
-                  >
-                    Delete user
-                  </Button>
-                </div>
-              </td>
-            </tr>
-          ))}
+                    {isUnknownRole && (
+                      <option value={currentRole} disabled>
+                        Unknown ({currentRole})
+                      </option>
+                    )}
+                    {availableRoles.map((roleOption) => (
+                      <option key={roleOption.value} value={roleOption.value}>
+                        {roleOption.label}
+                      </option>
+                    ))}
+                  </select>
+                </td>
+                <td>
+                  <div className="user-actions">
+                    <Button
+                      onClick={() => {
+                        console.log("TODO: change role", {
+                          userId: user.id,
+                          email: user.email,
+                          oldRole: currentRole,
+                          newRole: selectedRole,
+                        });
+                      }}
+                      disabled={selectedRole === currentRole}
+                    >
+                      Change role
+                    </Button>
+                    <Button
+                      onClick={() => console.log('Delete user:', user.id, user.email)}
+                    >
+                      Delete user
+                    </Button>
+                  </div>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </main>
