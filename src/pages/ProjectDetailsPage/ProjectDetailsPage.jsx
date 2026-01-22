@@ -338,39 +338,42 @@ function ProjectDetailsPage() {
                       </p>
                     )}
                     <div className="approval-actions">
-                      {canApproveInternal && (
-                        <Button
-                          type="button"
-                          className="approval-button"
-                          disabled={
-                            file.internalApproval ||
-                            internalApprovalUpdatingId === file.id
-                          }
-                          onClick={() => handleInternalApprove(file.id)}
-                        >
-                          {internalApprovalUpdatingId === file.id
-                            ? "Processing..."
-                            : file.internalApproval
-                            ? "Internal approved"
-                            : "Approve internally"}
-                        </Button>
-                      )}
-                      {canApprovePartner && (
-                        <Button
-                          type="button"
-                          className="approval-button"
-                          disabled={
-                            file.partnerApproval ||
-                            partnerApprovalUpdatingId === file.id
-                          }
-                          onClick={() => handlePartnerApprove(file.id)}
-                        >
-                          {partnerApprovalUpdatingId === file.id
-                            ? "Processing..."
-                            : file.partnerApproval
-                            ? "Partner approved"
-                            : "Approve as partner"}
-                        </Button>
+                      {(role === "pm_internal" || role === "pm_external" || role === "admin") && (
+                        <>
+                          <Button
+                            type="button"
+                            className="approval-button"
+                            disabled={
+                              !canApproveInternal ||
+                              file.internalApproval ||
+                              internalApprovalUpdatingId === file.id
+                            }
+                            onClick={() => handleInternalApprove(file.id)}
+                          >
+                            {internalApprovalUpdatingId === file.id
+                              ? "Processing..."
+                              : file.internalApproval
+                              ? "Internal approved"
+                              : "Approve internally"}
+                          </Button>
+
+                          <Button
+                            type="button"
+                            className="approval-button"
+                            disabled={
+                              !canApprovePartner ||
+                              file.partnerApproval ||
+                              partnerApprovalUpdatingId === file.id
+                            }
+                            onClick={() => handlePartnerApprove(file.id)}
+                          >
+                            {partnerApprovalUpdatingId === file.id
+                              ? "Processing..."
+                              : file.partnerApproval
+                              ? "Partner approved"
+                              : "Approve as partner"}
+                          </Button>
+                        </>
                       )}
                     </div>
                   </li>
