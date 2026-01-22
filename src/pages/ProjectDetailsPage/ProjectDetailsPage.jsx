@@ -234,11 +234,20 @@ function ProjectDetailsPage() {
 
   const localCoverImage = localImages[projectId] || null;
 
-  const buildFilesForThisProject =
-    buildFiles.filter((file) => Number(file.projectId) === Number(project.id));
+  const isBuilder = role === "builder";
 
-  const projectDocumentsForThisProject =
-    projectDocuments.filter((doc) => Number(doc.projectId) === Number(project.id));
+  const buildFilesForThisProject = buildFiles
+    .filter((file) => Number(file.projectId) === Number(project.id))
+    .filter((file) => {
+      if (isBuilder) {
+        return file.internalApproval === true && file.partnerApproval === true;
+      }
+      return true;
+    });
+
+  const projectDocumentsForThisProject = isBuilder
+    ? []
+    : projectDocuments.filter((doc) => Number(doc.projectId) === Number(project.id));
 
   const canApproveInternal = role === "pm_internal" || role === "admin";
   const canApprovePartner = role === "pm_external" || role === "admin";
@@ -294,7 +303,9 @@ function ProjectDetailsPage() {
             </p>
           )}
           {buildFilesForThisProject.length === 0 ? (
-            <p>No build files available yet.</p>
+            <p>
+              {isBuilder ? "No approved buildfiles found" : "No build files available yet."}
+            </p>
           ) : (
             <ul>
               {buildFilesForThisProject.map((file) => {
@@ -370,7 +381,9 @@ function ProjectDetailsPage() {
         </div>
         <div className="project-details-page__placeholder-card">
           <h2>Documents</h2>
-          {projectDocumentsForThisProject.length === 0 ? (
+          {isBuilder ? (
+            <p>No documents available</p>
+          ) : projectDocumentsForThisProject.length === 0 ? (
             <p>No documents available yet.</p>
           ) : (
             <ul>
