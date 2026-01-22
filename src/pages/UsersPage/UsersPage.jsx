@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { AuthenticationContext } from '../../context/AuthenticationContext/AuthenticationContext';
-import Button from '../../components/Button/Button';
+import UserRow from '../../components/UserRow/UserRow';
 import './UsersPage.css';
 
 const availableRoles = [
@@ -104,6 +104,13 @@ function UsersPage() {
     };
   });
 
+  function handleRoleSelect(userId, newRole) {
+    setSelectedRolesByUserId({
+      ...selectedRolesByUserId,
+      [userId]: newRole,
+    });
+  }
+
   return (
     <main className="users-page">
       <h1>Users</h1>
@@ -122,55 +129,20 @@ function UsersPage() {
           {usersForDisplay.map((user) => {
             const currentRole = user.role;
             const selectedRole = selectedRolesByUserId[user.id] || currentRole;
-            const isUnknownRole = !availableRoles.some(r => r.value === currentRole);
 
             return (
-              <tr key={user.id}>
-                <td>{user.firstName}</td>
-                <td>{user.lastName}</td>
-                <td>{user.companyName}</td>
-                <td>{user.email}</td>
-                <td>
-                  <select
-                    value={selectedRole}
-                    onChange={(e) => {
-                      const newRoleValue = e.target.value;
-                      setSelectedRolesByUserId({
-                        ...selectedRolesByUserId,
-                        [user.id]: newRoleValue,
-                      });
-                    }}
-                  >
-                    {isUnknownRole && (
-                      <option value={currentRole} disabled>
-                        Unknown ({currentRole})
-                      </option>
-                    )}
-                    {availableRoles.map((roleOption) => (
-                      <option key={roleOption.value} value={roleOption.value}>
-                        {roleOption.label}
-                      </option>
-                    ))}
-                  </select>
-                </td>
-                <td>
-                  <div className="user-actions">
-                    <Button
-                      onClick={() => {}}
-                      disabled={true}
-                    >
-                      Role change not available yet
-                    </Button>
-                    <Button
-                      onClick={() => {}}
-                      disabled={true}
-                      className="button-danger"
-                    >
-                      Delete user
-                    </Button>
-                  </div>
-                </td>
-              </tr>
+              <UserRow
+                key={user.id}
+                userId={user.id}
+                firstName={user.firstName}
+                lastName={user.lastName}
+                companyName={user.companyName}
+                email={user.email}
+                currentRole={currentRole}
+                selectedRole={selectedRole}
+                availableRoles={availableRoles}
+                onRoleSelect={handleRoleSelect}
+              />
             );
           })}
         </tbody>
