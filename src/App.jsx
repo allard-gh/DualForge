@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Routes, Route, Link, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
 import { ROUTES } from './constants/routes';
 import { AuthenticationContext } from './context/AuthenticationContext/AuthenticationContext';
 import SidebarLayout from './components/layout/SidebarLayout/SidebarLayout';
@@ -11,9 +11,11 @@ import DashboardPage from './pages/DashboardPage/DashboardPage.jsx';
 import UsersPage from './pages/UsersPage/UsersPage.jsx';
 import ProjectDetailsPage from './pages/ProjectDetailsPage/ProjectDetailsPage.jsx';
 import BuildsPage from './pages/BuildsPage/BuildsPage.jsx';
+import Button from './components/Button/Button';
 
 function App() {
   const { isUserAuthenticated, role } = useContext(AuthenticationContext);
+  const navigate = useNavigate();
 
   return (
     <Routes>
@@ -23,8 +25,8 @@ function App() {
           <PublicLayout
             topRightContent={
               <>
-                <Link to={ROUTES.SIGN_IN}>Sign In</Link>
-                <Link to={ROUTES.SIGN_UP}>Sign Up</Link>
+                <Button type="button" onClick={() => navigate(ROUTES.SIGN_IN)}>Sign In</Button>
+                <Button type="button" onClick={() => navigate(ROUTES.SIGN_UP)}>Sign Up</Button>
               </>
             }
           >
@@ -36,7 +38,7 @@ function App() {
         path={ROUTES.SIGN_IN}
         element={
           <PublicLayout
-            topRightContent={<Link to={ROUTES.SIGN_UP}>Sign Up</Link>}
+            topRightContent={<Button type="button" onClick={() => navigate(ROUTES.SIGN_UP)}>Sign Up</Button>}
           >
             <SignInPage />
           </PublicLayout>
@@ -46,7 +48,7 @@ function App() {
         path={ROUTES.SIGN_UP}
         element={
           <PublicLayout
-            topRightContent={<Link to={ROUTES.SIGN_IN}>Sign In</Link>}
+            topRightContent={<Button type="button" onClick={() => navigate(ROUTES.SIGN_IN)}>Sign In</Button>}
           >
             <SignUpPage />
           </PublicLayout>
